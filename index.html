@@ -1,0 +1,1890 @@
+<title>Valuation Valley</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap">
+<style>
+/* Layout: storybook valley. Sky-and-hills banner on top, one centred stage; inside a level the question sits left and the case exhibit stays pinned on the right. Bright single look on purpose (Columbia blues, gold coins, wood accents). */
+:root {
+  --sky: #eef6fc;
+  --sky-2: #d3e8f6;
+  --cu-blue: #b9d9eb;
+  --hill-2: #8fbfe0;
+  --hill-3: #5d9bcf;
+  --blue: #2a6db0;
+  --blue-dark: #1d4f91;
+  --navy: #16325c;
+  --ink: #1b2d4f;
+  --muted: #5d6f8c;
+  --line: #d6e4f0;
+  --card: #ffffff;
+  --gold: #f4b63f;
+  --gold-dark: #b97c0c;
+  --heart: #ef5d72;
+  --leaf: #2f9a68;
+  --leaf-soft: #e2f4eb;
+  --oops: #d9534f;
+  --oops-soft: #fdecea;
+  --wood: #c88a52;
+  --wood-soft: #f7ead9;
+  --mane: #f0a24a;
+  --fur: #f9d58f;
+  --bs-ev: #2f5486;
+  --bs-nonop: #d06c3c;
+  --bs-debt: #46946d;
+  --bs-eq: #8590a8;
+  --f-display: "Baloo 2", "Trebuchet MS", system-ui, sans-serif;
+  --f-body: "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+html, body { height: 100%; }
+body {
+  background: linear-gradient(180deg, var(--sky-2) 0, var(--sky) 320px) fixed, var(--sky);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 17px;
+  line-height: 1.5;
+}
+.stage {
+  max-width: 1060px; margin: 0 auto; min-height: 100%;
+  padding-block: 18px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { margin: 0; text-wrap: balance; font-family: var(--f-display); color: var(--navy); line-height: 1.15; }
+p { margin: 0; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* buttons */
+.btn {
+  appearance: none; border: 0; cursor: pointer; font-family: var(--f-display); font-weight: 700; font-size: 18px;
+  padding: 10px 22px 8px; border-radius: 999px; background: var(--card); color: var(--blue-dark);
+  box-shadow: inset 0 0 0 2px var(--cu-blue), 0 3px 0 var(--cu-blue); transition: transform 0.12s, box-shadow 0.12s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(2px); box-shadow: inset 0 0 0 2px var(--cu-blue), 0 1px 0 var(--cu-blue); }
+.btn.primary { background: var(--blue); color: #fff; box-shadow: 0 4px 0 var(--blue-dark); }
+.btn.primary:active { box-shadow: 0 1px 0 var(--blue-dark); }
+.btn.gold { background: var(--gold); color: var(--navy); box-shadow: 0 4px 0 var(--gold-dark); }
+.btn[disabled] { opacity: 0.45; cursor: default; transform: none; }
+.btn.small { font-size: 15px; padding: 7px 14px 5px; }
+.link { appearance: none; border: 0; background: none; padding: 0; color: var(--muted); font: inherit; font-size: 14px; text-decoration: underline; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+/* banner */
+.banner { display: block; width: 100%; height: auto; max-height: 190px; border-radius: 22px; background: var(--sky-2); }
+.banner .far { fill: var(--cu-blue); }
+.banner .mid { fill: var(--hill-2); }
+.banner .near { fill: var(--hill-3); }
+.banner .pine { fill: var(--blue-dark); opacity: 0.75; }
+.banner .sun { fill: #ffe39c; }
+.banner .cloud { fill: #ffffff; opacity: 0.9; }
+
+/* title */
+.title-screen { display: grid; gap: 22px; padding-top: 6px; }
+.title-hero { position: relative; }
+.title-hero .lion-big { position: absolute; left: 50%; bottom: -26px; transform: translateX(-50%); width: clamp(110px, 18vw, 150px); }
+.title-text { display: grid; gap: 10px; justify-items: center; text-align: center; padding-top: 26px; }
+.game-name { font-size: clamp(44px, 8vw, 72px); font-weight: 800; color: var(--blue-dark); letter-spacing: -0.01em; }
+.tagline { font-size: 20px; color: var(--muted); }
+.rules { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 10px; max-width: 520px; text-align: left; }
+.rules li { display: flex; gap: 12px; align-items: center; background: var(--card); border-radius: 16px; padding: 10px 14px; box-shadow: 0 2px 0 var(--line); }
+.rules svg { flex: none; }
+
+/* top bar (hub and level) */
+.topbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin-bottom: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--f-display); font-weight: 800; font-size: 24px; color: var(--blue-dark); }
+.brand svg { width: 42px; height: 42px; }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.pill { display: inline-flex; align-items: center; gap: 6px; background: var(--card); border-radius: 999px; padding: 4px 12px 4px 6px; font-weight: 800; box-shadow: 0 2px 0 var(--line); font-variant-numeric: tabular-nums; }
+.pill svg { width: 24px; height: 24px; }
+.pill.toolbtn { cursor: pointer; border: 0; font: inherit; font-weight: 800; color: var(--ink); }
+.pill.toolbtn[disabled] { opacity: 0.4; cursor: default; }
+.pill.toolbtn:not([disabled]):hover { box-shadow: 0 2px 0 var(--line), inset 0 0 0 2px var(--cu-blue); }
+.hearts { display: flex; gap: 2px; padding: 4px 8px; }
+.hearts svg { width: 24px; height: 24px; }
+.hearts.ouch { animation: ouch 0.45s ease; }
+@keyframes ouch { 0%,100% { transform: none; } 20% { transform: translateX(-5px) scale(1.06); } 50% { transform: translateX(4px); } 75% { transform: translateX(-2px); } }
+
+/* hub */
+.hub-top { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: end; margin-top: 16px; }
+.owner { width: 74px; height: 74px; }
+.bubble { position: relative; background: var(--card); border-radius: 20px; padding: 14px 18px; box-shadow: 0 3px 0 var(--line); max-width: 720px; }
+.bubble::before { content: ""; position: absolute; left: -9px; bottom: 18px; border: 10px solid transparent; border-right-color: var(--card); border-left: 0; }
+.bubble .who { font-family: var(--f-display); font-weight: 700; color: var(--wood); font-size: 15px; }
+.bubble .say { font-size: 18px; }
+.hub-grid { margin-top: 24px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.panel { background: var(--card); border-radius: 22px; padding: 18px; box-shadow: 0 3px 0 var(--line); min-width: 0; }
+.panel-title { font-family: var(--f-display); font-weight: 700; font-size: 20px; color: var(--navy); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.panel-title small { font-family: var(--f-body); font-weight: 600; font-size: 13px; color: var(--muted); }
+
+.mvbs-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 280px; gap: 6px; }
+.mvbs-head { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-weight: 800; font-size: 14px; color: var(--muted); margin-bottom: 4px; }
+.mvbs-col { display: grid; gap: 6px; min-width: 0; }
+.mvbs-col.assets { grid-template-rows: 4fr 1.1fr; }
+.mvbs-col.claims { grid-template-rows: 3.3fr 1.8fr; }
+.blk { border-radius: 12px; padding: 10px 12px; color: #fff; display: flex; flex-direction: column; justify-content: center; gap: 1px; min-width: 0; }
+.blk.ev { background: var(--bs-ev); }
+.blk.nonop { background: var(--bs-nonop); }
+.blk.eq { background: var(--bs-eq); }
+.blk.debt { background: var(--bs-debt); }
+.blk.unknown { background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.10) 0 8px, transparent 8px 16px); }
+.blk .bl { font-weight: 800; font-size: 15px; line-height: 1.2; }
+.blk .bs { font-size: 13px; opacity: 0.9; line-height: 1.25; }
+.blk .bv { font-family: var(--f-display); font-weight: 800; font-size: 26px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.blk.unknown .bv { opacity: 0.6; }
+.blk.pop { animation: pop 0.9s cubic-bezier(.2,1.6,.4,1); }
+@keyframes pop { 0% { transform: scale(0.9); filter: brightness(1.3); } 60% { transform: scale(1.04); } 100% { transform: none; filter: none; } }
+
+.trail { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.stop { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: 12px; align-items: center; position: relative; padding: 8px 0; }
+.stop:not(:last-child)::after { content: ""; position: absolute; left: 27px; top: 58px; bottom: -8px; border-left: 3px dashed var(--cu-blue); }
+.stop .node { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--sky); box-shadow: inset 0 0 0 3px var(--cu-blue); position: relative; z-index: 1; }
+.stop.open .node { background: var(--card); box-shadow: inset 0 0 0 3px var(--blue); }
+.stop.done .node { background: var(--leaf-soft); box-shadow: inset 0 0 0 3px var(--leaf); }
+.stop .node svg { width: 30px; height: 30px; }
+.stop .nm { font-family: var(--f-display); font-weight: 700; font-size: 19px; color: var(--navy); line-height: 1.1; }
+.stop .tp { font-size: 14.5px; color: var(--muted); }
+.stop.locked .nm, .stop.locked .tp { opacity: 0.6; }
+.chip { display: inline-block; font-size: 12.5px; font-weight: 800; padding: 1px 9px; border-radius: 999px; margin-top: 3px; }
+.chip.done { background: var(--leaf-soft); color: var(--leaf); }
+.chip.locked { background: var(--sky); color: var(--muted); }
+.top-right { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.reset-zone { background: var(--card); border-radius: 18px; padding: 12px 16px; margin-bottom: 14px; box-shadow: inset 0 0 0 2px var(--cu-blue); display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; font-weight: 700; }
+.reset-zone:empty { display: none; }
+.pill.music.on { box-shadow: 0 2px 0 var(--line), inset 0 0 0 2px var(--blue); color: var(--blue-dark); }
+.credit { font-size: 13px; color: var(--muted); }
+.credit a { color: var(--muted); }
+.title-top { display: flex; justify-content: flex-end; }
+.title-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+.hub-foot { margin-top: 30px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; color: var(--muted); font-size: 14px; }
+
+/* shop */
+.shop { display: grid; gap: 18px; }
+.shop-head { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: center; }
+.shop-head .lion-mid { width: 84px; height: 84px; }
+.tools { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.tool { background: var(--card); border-radius: 22px; padding: 18px; box-shadow: 0 3px 0 var(--line); display: grid; gap: 8px; align-content: start; min-width: 0; }
+.tool .ic { width: 58px; height: 58px; border-radius: 18px; background: var(--sky); display: grid; place-items: center; }
+.tool .ic svg { width: 40px; height: 40px; }
+.tool .tn { font-family: var(--f-display); font-weight: 700; font-size: 20px; color: var(--navy); }
+.tool .td { font-size: 15.5px; color: var(--muted); }
+.tool .tb { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; flex-wrap: wrap; }
+.tool .owned { font-size: 14px; font-weight: 800; color: var(--blue-dark); }
+.price { display: inline-flex; align-items: center; gap: 4px; }
+.price svg { width: 18px; height: 18px; }
+.shop-msg { min-height: 1.4em; font-weight: 700; color: var(--muted); }
+.shop-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* level */
+.lvl-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.lvl-name { font-family: var(--f-display); font-weight: 800; font-size: 22px; color: var(--blue-dark); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.dots { display: inline-flex; gap: 6px; }
+.dot { width: 12px; height: 12px; border-radius: 50%; background: var(--card); box-shadow: inset 0 0 0 2px var(--cu-blue); }
+.dot.done { background: var(--leaf); box-shadow: none; }
+.dot.now { background: var(--blue); box-shadow: 0 0 0 3px var(--cu-blue); }
+.lvl-grid { margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 380px); gap: 24px; align-items: start; }
+.lvl-grid.wide { grid-template-columns: minmax(0, 1fr); }
+.ask { display: grid; gap: 16px; min-width: 0; }
+.ask-top { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; align-items: start; }
+.ask-top .lion-sm { width: 64px; height: 64px; }
+.prompt { font-family: var(--f-display); font-weight: 700; font-size: clamp(21px, 2.8vw, 26px); color: var(--navy); line-height: 1.25; }
+.prompt .item { color: var(--blue); }
+.sub { color: var(--muted); font-size: 16px; margin-top: 4px; }
+
+.choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.choice {
+  appearance: none; border: 0; cursor: pointer; text-align: left; font: inherit; color: var(--ink); position: relative;
+  background: var(--card); border-radius: 20px; padding: 14px 14px 16px; display: grid; gap: 6px; align-content: start;
+  box-shadow: inset 0 0 0 2px var(--line), 0 4px 0 var(--line); transition: transform 0.12s, box-shadow 0.12s;
+}
+.choice:not([disabled]):hover { transform: translateY(-3px); box-shadow: inset 0 0 0 2px var(--blue), 0 6px 0 var(--cu-blue); }
+.choice .ck { display: flex; align-items: center; justify-content: space-between; }
+.choice .ck svg { width: 34px; height: 34px; }
+.choice .key { font-size: 13px; font-weight: 800; color: var(--muted); }
+.choice .cn { font-family: var(--f-display); font-weight: 700; font-size: 19px; color: var(--navy); line-height: 1.15; }
+.choice .cd { font-size: 14.5px; color: var(--muted); line-height: 1.35; }
+.choice[disabled] { cursor: default; }
+.choice.wrong { background: var(--oops-soft); box-shadow: inset 0 0 0 2px var(--oops); opacity: 0.75; }
+.choice.wrong::after { content: "\2715"; position: absolute; top: 10px; right: 12px; color: var(--oops); font-weight: 800; }
+.choice.right { background: var(--leaf-soft); box-shadow: inset 0 0 0 3px var(--leaf), 0 4px 0 var(--leaf); }
+.choice.crossed { opacity: 0.35; text-decoration: line-through; }
+.choice.dim { opacity: 0.5; }
+
+.statements { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.stmt {
+  appearance: none; border: 0; cursor: pointer; text-align: left; font: inherit; color: var(--ink); position: relative;
+  background: var(--card); border-radius: 20px; padding: 14px 16px 16px; box-shadow: inset 0 0 0 2px var(--line), 0 4px 0 var(--line);
+  transition: transform 0.12s, box-shadow 0.12s; min-width: 0;
+}
+.stmt:not([aria-disabled="true"]):hover { transform: translateY(-3px); box-shadow: inset 0 0 0 2px var(--blue), 0 6px 0 var(--cu-blue); }
+.stmt[aria-disabled="true"] { cursor: default; }
+.stmt.wrong { background: var(--oops-soft); box-shadow: inset 0 0 0 2px var(--oops); }
+.stmt.right { background: var(--leaf-soft); box-shadow: inset 0 0 0 3px var(--leaf), 0 4px 0 var(--leaf); }
+.stmt.crossed { opacity: 0.4; }
+.stmt h3 { font-size: 18px; margin-bottom: 6px; }
+
+.ex { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.ex td { padding: 3px 8px; }
+.ex td:last-child { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; font-weight: 700; }
+.ex tr.sub td { color: var(--muted); padding-left: 22px; font-weight: 600; }
+.ex tr.total td { border-top: 1.5px solid var(--line); font-weight: 800; }
+.ex tr.gap td { height: 8px; padding: 0; }
+.sheet { position: sticky; top: 12px; }
+.sheet .ex tr.hl td { background: #fff3c4; }
+.sheet .ex tr.hl td:first-child { border-radius: 8px 0 0 8px; box-shadow: inset 4px 0 0 var(--gold); }
+.sheet .ex tr.hl td:last-child { border-radius: 0 8px 8px 0; }
+.ex-scroll { overflow-x: auto; }
+
+.pickable td { cursor: pointer; }
+.pickable:hover td { background: var(--sky); }
+.pickable td:first-child { position: relative; padding-left: 34px; }
+.pickable td:first-child::before { content: ""; position: absolute; left: 8px; top: 50%; width: 16px; height: 16px; margin-top: -8px; border-radius: 6px; box-shadow: inset 0 0 0 2px var(--cu-blue); background: var(--card); }
+.pickable.on td { background: #e6f0fb; }
+.pickable.on td:first-child::before { background: var(--blue); box-shadow: none; }
+.pickable.on td:first-child::after { content: ""; position: absolute; left: 13px; top: 50%; width: 5px; height: 9px; margin-top: -6px; border: solid #fff; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg); }
+.ex .tag { display: inline-block; margin-left: 8px; font-size: 11.5px; font-weight: 800; padding: 0 7px; border-radius: 999px; color: #fff; vertical-align: 1px; }
+.ex .tag.nonop { background: var(--bs-nonop); }
+.ex .tag.debt { background: var(--bs-debt); }
+.static-row td:first-child { padding-left: 34px; }
+
+.verdict { border-radius: 18px; padding: 12px 16px; font-size: 16.5px; }
+.verdict.good { background: var(--leaf-soft); }
+.verdict.bad { background: var(--oops-soft); }
+.verdict strong { font-family: var(--f-display); font-size: 18px; }
+.verdict.good strong { color: var(--leaf); }
+.verdict.bad strong { color: var(--oops); }
+.verdict .gain { display: inline-flex; align-items: center; gap: 3px; font-weight: 800; color: var(--gold-dark); white-space: nowrap; }
+.verdict .gain svg { width: 18px; height: 18px; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+/* Level 2: 1996 pro forma, assumptions, FCF ladder */
+.ledger-col { display: grid; gap: 24px; min-width: 0; }
+.build { width: 100%; border-collapse: collapse; font-size: 16px; }
+.build td { padding: 5px 10px; }
+.build td:nth-child(2) { color: var(--muted); font-size: 14px; white-space: nowrap; }
+.build td:last-child { text-align: right; font-family: var(--f-display); font-weight: 800; font-size: 19px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.build tr.sum td { border-top: 1.5px solid var(--line); }
+.build tr.nop td { color: var(--blue-dark); font-weight: 800; }
+.build tr.cur td { background: #fff3c4; }
+.build tr.cur td:first-child { border-radius: 8px 0 0 8px; box-shadow: inset 4px 0 0 var(--gold); }
+.build tr.cur td:last-child { border-radius: 0 8px 8px 0; }
+.build .q, .ladder .unk { color: var(--cu-blue); }
+.assume { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.assume th, .assume td { padding: 4px 8px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.assume th:first-child, .assume td:first-child { text-align: left; }
+.assume th { font-size: 13px; color: var(--muted); font-weight: 800; }
+.assume tr.hl td { background: #fff3c4; }
+.choice .cn.big { font-size: 28px; }
+.ladder { width: 100%; border-collapse: collapse; font-size: 16px; }
+.ladder td { padding: 6px 10px; }
+.ladder td:last-child { text-align: right; font-family: var(--f-display); font-weight: 800; font-size: 22px; font-variant-numeric: tabular-nums; }
+.ladder tr.fcf td { border-top: 2px solid var(--navy); font-weight: 800; }
+.ladder .from { font-size: 12.5px; color: var(--muted); font-weight: 700; margin-left: 4px; }
+.ladder .val { display: inline-block; color: var(--blue-dark); }
+.ladder .val.pop { animation: pop 0.9s cubic-bezier(.2,1.6,.4,1); }
+
+.stmt.on { box-shadow: inset 0 0 0 3px var(--blue), 0 4px 0 var(--cu-blue); background: #f2f8fe; }
+.stmt.on h3::after { content: " ✓"; color: var(--blue); }
+.ex tr.detail td { color: var(--muted); padding-left: 22px; font-size: 13.5px; font-weight: 600; }
+.ex tr.detail td:last-child { font-weight: 600; }
+.build.inv th { font-size: 13px; color: var(--muted); font-weight: 800; text-align: right; padding: 4px 10px; }
+.build.inv td:nth-child(2), .build.inv td:nth-child(3) { text-align: right; font-variant-numeric: tabular-nums; font-size: 15.5px; }
+.build.inv td:nth-child(2) { color: var(--muted); }
+.build.inv td:nth-child(3) { color: var(--ink); }
+
+.river { display: block; width: 100%; height: auto; }
+.river .band { fill: var(--cu-blue); }
+.river .wave { fill: none; stroke: #ffffff; stroke-width: 1.4; opacity: 0.7; }
+.river .yrtxt { font: 700 12px var(--f-body); fill: var(--blue-dark); text-anchor: middle; }
+.river .band-txt { fill: var(--navy); }
+.river .today { fill: var(--gold); stroke: var(--gold-dark); stroke-width: 1.5; }
+.river .bar.pos { fill: var(--blue); }
+.river .bar.neg { fill: var(--bs-nonop); }
+.river .first .bar { fill: var(--gold); }
+.river .wrong .bar { fill: #ecb8b4; }
+.river .val { font: 800 13px var(--f-display); fill: var(--navy); text-anchor: middle; }
+.river .gr { font: 700 12px var(--f-body); fill: var(--muted); text-anchor: middle; }
+.river .yr { cursor: pointer; outline: none; }
+.river .yr .hit { fill: transparent; }
+.river .yr:hover .hit, .river .yr:focus-visible .hit { fill: var(--sky); stroke: var(--cu-blue); stroke-width: 2; }
+.river .mark { font: 800 13px var(--f-display); fill: var(--navy); text-anchor: middle; }
+.river .arrow { fill: none; stroke: var(--gold-dark); stroke-width: 2.2; }
+.river .tag { fill: #fff3c4; stroke: var(--gold-dark); stroke-width: 1.5; }
+.river-panel { padding: 10px 12px; }
+.river-legend { font-size: 13.5px; color: var(--muted); margin-top: 2px; }
+.trygp { display: grid; gap: 8px; }
+.trygp input[type="range"] { width: 100%; accent-color: var(--blue); }
+.gout { font-size: 16px; }
+.fcf5 { width: 100%; border-collapse: collapse; font-size: 15px; }
+.fcf5 th { font-size: 13px; color: var(--muted); font-weight: 800; text-align: right; padding: 4px 8px; }
+.fcf5 td { padding: 5px 8px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fcf5 td:first-child, .fcf5 th:first-child { text-align: left; }
+.fcf5 tr.fcf td { border-top: 2px solid var(--navy); font-weight: 800; color: var(--blue-dark); }
+.fcf5 .y96 { background: #fff8dd; }
+.fcf5.pop, .rvline.pop { animation: pop 0.9s cubic-bezier(.2,1.6,.4,1); }
+.fcfnote { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.rvline { margin-top: 10px; font-size: 15.5px; }
+
+.eq-panel { padding: 16px 14px; }
+.eqn { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 6px; font-family: var(--f-display); font-weight: 700; font-size: 20px; color: var(--navy); }
+.lines { display: grid; gap: 14px; }
+.lhs { white-space: nowrap; }
+.frac { display: inline-grid; justify-items: center; gap: 4px; }
+.frac .fnum { padding: 0 2px 6px; border-bottom: 2.5px solid var(--navy); min-width: 66px; display: flex; justify-content: center; }
+.frac .fden { font-size: 16px; white-space: nowrap; }
+.frac .fyr { font: 700 12px var(--f-body); color: var(--muted); }
+.op { font-size: 20px; color: var(--navy); }
+.eq-result { font-weight: 800; color: var(--blue-dark); font-size: 24px; }
+.slot { display: inline-flex; align-items: center; justify-content: center; min-width: 70px; height: 42px; padding: 0 10px; border-radius: 12px;
+  border: 2.5px dashed var(--cu-blue); background: var(--sky); color: var(--muted); font-family: var(--f-display); font-weight: 800; font-size: 19px; cursor: pointer; }
+.slot.filled { border-style: solid; border-color: var(--blue); background: var(--card); color: var(--navy); }
+.slot.ready { border-color: var(--gold); background: #fff8dd; }
+.slot.locked, .slot.done { border-style: solid; border-color: var(--leaf); background: var(--leaf-soft); color: var(--navy); cursor: default; }
+.slot.ghost { cursor: default; opacity: 0.55; }
+.slot.fixed { border: 0; background: transparent; color: var(--navy); cursor: default; min-width: 0; padding: 0 4px; }
+sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vertical-align: 6px; border-radius: 9px; }
+.frac .fnum .slot { min-width: 60px; padding: 0 7px; font-size: 18px; }
+.tray { display: flex; flex-wrap: wrap; gap: 10px; padding: 12px; border-radius: 18px; background: var(--wood-soft); min-height: 66px; align-items: center; }
+.tray:empty::before { content: "All cards are placed."; color: var(--muted); font-weight: 700; }
+.mcard { appearance: none; border: 0; cursor: grab; font-family: var(--f-display); font-weight: 800; font-size: 20px; color: var(--navy); background: var(--card);
+  padding: 8px 16px 6px; border-radius: 12px; box-shadow: inset 0 0 0 2px var(--line), 0 3px 0 var(--wood); transition: transform 0.12s; }
+.mcard:hover { transform: translateY(-2px); }
+.mcard.sel { box-shadow: inset 0 0 0 3px var(--gold), 0 3px 0 var(--gold-dark); transform: translateY(-3px); }
+.complete { display: grid; justify-items: center; gap: 16px; text-align: center; max-width: 780px; margin: 0 auto; padding-top: 10px; }
+.trophy-row { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.trophy { width: 140px; height: 160px; }
+.complete .bubble { text-align: left; max-width: 420px; }
+.complete h2 { font-size: clamp(36px, 6vw, 54px); font-weight: 800; color: var(--blue-dark); }
+.complete > .panel { width: 100%; text-align: left; }
+.mults { font-size: 18px; }
+.pill.trophy-pill { color: var(--gold-dark); }
+.pill.trophy-pill svg { width: 22px; height: 24px; }
+
+.cheat { display: grid; gap: 8px; justify-items: center; background: var(--card); border-radius: 18px; padding: 14px 18px; box-shadow: 0 3px 0 var(--line); width: min(100%, 420px); box-sizing: border-box; }
+.cheat label { font-weight: 800; color: var(--blue-dark); }
+.cheat-row { display: flex; gap: 8px; width: 100%; }
+.cheat-row input { flex: 1; min-width: 0; font-family: var(--f-display); font-weight: 700; font-size: 18px; letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 12px; border-radius: 12px; border: 2px solid var(--cu-blue); color: var(--navy); background: var(--sky); }
+.cheat-msg { min-height: 1.3em; font-size: 14.5px; color: var(--oops); font-weight: 700; }
+/* email before the first level; award token after the last (Canvas check-in) */
+.signin { display: grid; gap: 8px; justify-items: center; background: var(--card); border-radius: 18px; padding: 14px 18px; box-shadow: 0 3px 0 var(--line); width: min(100%, 460px); box-sizing: border-box; }
+.signin label { font-weight: 800; color: var(--blue-dark); }
+.signin-row { display: flex; gap: 8px; width: 100%; }
+.signin-row input { flex: 1; min-width: 0; font-family: var(--f-body); font-weight: 700; font-size: 17px; padding: 7px 12px; border-radius: 12px; border: 2px solid var(--cu-blue); color: var(--navy); background: var(--sky); }
+.signin-note { font-size: 14px; color: var(--muted); }
+.signin-msg { min-height: 1.3em; font-size: 14.5px; color: var(--oops); font-weight: 700; }
+.signin .warn { font-size: 14.5px; color: var(--gold-dark); font-weight: 700; }
+.who-line { font-size: 15.5px; overflow-wrap: anywhere; }
+.award { display: grid; gap: 6px; justify-items: center; background: var(--card); border: 3px dashed var(--gold); border-radius: 18px; padding: 14px 20px; width: min(100%, 540px); box-sizing: border-box; margin: 0 auto 14px; text-align: center; }
+.award .lbl { font-family: var(--f-display); font-weight: 800; color: var(--gold-dark); font-size: 15px; letter-spacing: 0.06em; text-transform: uppercase; }
+.award .tok { font-family: var(--f-display); font-weight: 800; font-size: clamp(30px, 7vw, 42px); line-height: 1.1; color: var(--navy); letter-spacing: 0.08em; user-select: all; }
+.award .for { font-size: 15px; color: var(--muted); overflow-wrap: anywhere; }
+.award .how { font-size: 15px; }
+.award .paste { font-size: 15px; font-weight: 700; color: var(--blue-dark); }
+.award .line { display: block; max-width: 100%; box-sizing: border-box; padding: 8px 14px; border-radius: 12px; border: 2px solid var(--cu-blue); background: var(--sky); color: var(--navy); font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 16px; overflow-wrap: anywhere; user-select: all; }
+.copy-msg { min-height: 1.2em; font-size: 14px; color: var(--leaf); font-weight: 700; }
+
+.tslot { width: 38px; height: 30px; padding: 0; text-align: center; vertical-align: 8px; font-family: var(--f-display); font-weight: 800; font-size: 16px;
+  color: var(--navy); background: var(--sky); border: 2.5px dashed var(--cu-blue); border-radius: 9px; }
+.tslot:focus { outline: none; border-style: solid; border-color: var(--blue); background: var(--card); }
+.tslot.locked, .tslot.done { border-style: solid; border-color: var(--leaf); background: var(--leaf-soft); }
+
+/* end screens */
+.endcard { display: grid; justify-items: center; text-align: center; gap: 14px; padding-top: 30px; max-width: 620px; margin: 0 auto; }
+.endcard .lion-big { width: 150px; height: 150px; }
+.endcard h2 { font-size: clamp(34px, 6vw, 48px); font-weight: 800; color: var(--blue-dark); }
+.endcard p { font-size: 18.5px; }
+.statline { font-weight: 700; color: var(--muted); font-size: 15px; }
+
+@media (max-width: 820px) {
+  .lvl-grid { grid-template-columns: minmax(0, 1fr); }
+  .sheet { position: static; }
+  .hub-grid { grid-template-columns: minmax(0, 1fr); }
+  .tools { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 620px) {
+  .choices { grid-template-columns: minmax(0, 1fr); }
+  .statements { grid-template-columns: minmax(0, 1fr); }
+  .hub-top { grid-template-columns: minmax(0, 1fr); }
+  .bubble::before { display: none; }
+  .mvbs-grid { grid-template-rows: 250px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+
+<main class="stage" id="app"></main>
+<audio id="bgm" src="music/apple_cider.mp4" loop preload="none"></audio>
+<audio id="bgm-boss" src="music/video_dungeon_boss.mp4" loop preload="none"></audio>
+
+<script>
+(function () {
+  "use strict";
+
+  // ======================= content =======================
+  var SAVE_KEY = "valuation-valley-v1";
+  var MUSIC_KEY = "valuation-valley-music";
+
+  // Award token for the Canvas check-in (Xuelin, 20 Oct 2026): "VV-" + 5 Crockford base-32 characters taken from
+  // SHA-256(TOKEN_GAME + "|" + email + "|" + TOKEN_SECRET). tools/check_tokens.py reads TOKEN_GAME and TOKEN_SECRET
+  // from this file, so keep both on one line each. Change the secret each year.
+  var TOKEN_GAME = "VV";
+  var TOKEN_SECRET = "clarkson-lumber-1995-b6302-fall2026";
+  var CANVAS_ITEM = "Valuation Valley: award token";   // Canvas assignment, text entry: one line "email token"
+  var CANVAS_DEADLINE = "11:59 pm on Mon 11/9";
+  var BASE_HP = 5;
+  var START_COINS = 30;
+
+  // built: the level exists; a built level opens once the previous one is done
+  var LEVELS = [
+    { id: 1, name: "The Vault", topic: "Non-operating assets and debt", built: true, icon: "vault" },
+    { id: 2, name: "The Mill", topic: "Net operating profit", built: true, icon: "mill" },
+    { id: 3, name: "The Lumber Yard", topic: "Investment: ΔNFA and ΔNOWC", built: true, icon: "logs" },
+    { id: 4, name: "The River", topic: "Residual value", built: true, icon: "river" },
+    { id: 5, name: "The Counting House", topic: "Enterprise value, equity and multiples", built: true, icon: "coins" }
+  ];
+
+  var TOOLS = {
+    glass: { name: "Magnifying glass", desc: "Cross out one wrong card in a question.", price: 15 },
+    hat:   { name: "Hard hat", desc: "Your next mistake costs no heart.", price: 25 },
+    snack: { name: "Snack", desc: "+1 heart for your next level.", price: 35 }
+  };
+
+  // Exhibit 1, 1995 (thousands of dollars). cls is used in Level 2: keep | out | recompute
+  var IS = [
+    { k: "sales", n: "Net sales", v: 4519, cls: "keep" },
+    { k: "beginv", n: "Beginning inventory", v: 432, row: "detail" },
+    { k: "purch", n: "+ Purchases", v: 3579, row: "detail" },
+    { k: "endinv", n: "− Ending inventory", v: 587, row: "detail" },
+    { k: "cogs", n: "Cost of goods sold", v: 3424, cls: "keep" },
+    { k: "gp", n: "Gross profit", v: 1095, row: "sub" },
+    { k: "opex", n: "Operating expenses", v: 940, cls: "keep" },
+    { k: "ebit", n: "Earnings before interest and taxes", v: 155, row: "sub" },
+    { k: "int", n: "Interest expense", v: 56, cls: "out" },
+    { k: "ebt", n: "Income before taxes", v: 99, row: "sub" },
+    { k: "tax", n: "Provision for income taxes", v: 22, cls: "recompute" },
+    { k: "ni", n: "Net income", v: 77, row: "total", cls: "out" }
+  ];
+
+  // Exhibit 2, December 31, 1995 (thousands of dollars). cls is used in Level 1: nonop | debt | op | eq; drv in Level 3: sales | cogs | purch
+  var BS = [
+    { k: "cash", n: "Cash", v: 56, cls: "nonop" },
+    { k: "ar", n: "Accounts receivable, net", v: 606, cls: "op", drv: "sales" },
+    { k: "inv", n: "Inventory", v: 587, cls: "op", drv: "cogs" },
+    { k: "ca", n: "Current assets", v: 1249, row: "sub" },
+    { k: "ppe", n: "Property, net", v: 388, cls: "op", drv: "sales" },
+    { k: "ta", n: "Total assets", v: 1637, row: "total" },
+    { gap: true },
+    { k: "npb", n: "Notes payable, bank", v: 390, cls: "debt" },
+    { k: "nph", n: "Note payable to Holtz, current portion", v: 100, cls: "debt" },
+    { k: "npt", n: "Notes payable, trade", v: 127, cls: "debt" },
+    { k: "ap", n: "Accounts payable", v: 376, cls: "op", drv: "purch" },
+    { k: "acc", n: "Accrued expenses", v: 75, cls: "op", drv: "sales" },
+    { k: "tlc", n: "Term loan, current portion", v: 20, cls: "debt" },
+    { k: "cl", n: "Current liabilities", v: 1088, row: "sub" },
+    { k: "tl", n: "Term loan", v: 100, cls: "debt" },
+    { k: "nphl", n: "Note payable, Mr. Holtz", v: 0, cls: "debt", optional: true },
+    { k: "tli", n: "Total liabilities", v: 1188, row: "total" },
+    { k: "nw", n: "Net worth", v: 449, cls: "eq" },
+    { k: "tle", n: "Total liabilities and net worth", v: 1637, row: "total" }
+  ];
+
+  // ---- Level 1 (the Vault) ----
+  var WHY1 = {
+    cash: { ok: "Cash is non-operating in this course. It is added to enterprise value, exactly once.",
+            debt: "Cash is something Clarkson owns, not something it owes.",
+            op: "In this course, cash is non-operating. Our working capital (NOWC) leaves it out." },
+    ar:   { ok: "Receivables come from selling lumber on credit. They enter the valuation through NOWC.",
+            debt: "Receivables are owed to Clarkson, not by Clarkson.",
+            nonop: "Receivables come from selling lumber on credit, so the business needs them. They are part of NOWC." },
+    inv:  { ok: "Lumber in the yard is what Clarkson sells. Inventory enters through NOWC.",
+            debt: "Inventory is something Clarkson owns, not a claim on the firm.",
+            nonop: "Lumber in the yard is what Clarkson sells, so the business needs it. It is part of NOWC." },
+    ppe:  { ok: "The yard and buildings run the business. Property enters through net fixed assets.",
+            debt: "Property is an asset, not a claim on the firm.",
+            nonop: "Clarkson needs the yard to sell lumber. Property enters through net fixed assets." },
+    npb:  { ok: "A bank note bears interest. That makes it debt.",
+            nonop: "This is something Clarkson owes, not something it owns.",
+            op: "A bank note bears interest. It is financing, so it is debt." },
+    nph:  { ok: "All of Clarkson's notes payable bear interest, so this note is debt, even though it is due within the year.",
+            nonop: "This is something Clarkson owes, not something it owns.",
+            op: "Being due soon does not make it operating. The assignment says all notes payable bear interest." },
+    npt:  { ok: "Suppliers turned these bills into notes, and all notes payable bear interest. So they are debt.",
+            nonop: "This is something Clarkson owes, not something it owns.",
+            op: "Owed to suppliers, but as notes. Read the assignment: all notes payable on Clarkson's balance sheet bear interest." },
+    ap:   { ok: "Payables come from running the business and bear no interest. They enter through NOWC.",
+            debt: "Payables bear no interest and are already in NOWC. Counting them as debt would use them twice.",
+            nonop: "Payables are something Clarkson owes, not an asset." },
+    acc:  { ok: "Accrued expenses come from running the business and bear no interest. They enter through NOWC.",
+            debt: "Accrued expenses bear no interest and belong to the operating cycle, so they are not debt.",
+            nonop: "Accrued expenses are something Clarkson owes, not an asset." },
+    tlc:  { ok: "“Current” only says when it is due. An interest-bearing loan is debt either way.",
+            nonop: "This is something Clarkson owes, not something it owns.",
+            op: "Current is about timing, not about what kind of claim it is. The current part of a loan is still debt." },
+    tl:   { ok: "A bank term loan bears interest. It is debt.",
+            nonop: "This is something Clarkson owes, not something it owns.",
+            op: "A term loan is financing, not part of running the business. It is debt." }
+  };
+
+  // ---- Level 2 (the Mill) ----
+  var WHY2 = {
+    sales: { ok: "Sales are what the yard earns from operations. They are the top line of NOP.",
+             out: "Sales are the heart of operations; without them there is no operating profit.",
+             recompute: "Nothing to fix: 1995 sales go into NOP as reported. Only taxes need our own number." },
+    cogs:  { ok: "The lumber Clarkson sells is the main operating cost. It stays in NOP.",
+             out: "Buying lumber is the core cost of the business. Leaving it out would overstate NOP.",
+             recompute: "Nothing to fix: COGS goes into NOP as reported. Only taxes need our own number." },
+    opex:  { ok: "Wages, rent and depreciation are costs of running the yard. They stay in NOP.",
+             out: "Operating expenses, depreciation included, are costs of running the business. They stay in NOP.",
+             recompute: "Nothing to fix: operating expenses go into NOP as reported. Only taxes need our own number." },
+    int:   { ok: "Interest goes to lenders, whom we value separately as debt. NOP is what operations earn before paying them, so NOP is not net income.",
+             keep: "Interest is a payment to lenders, not a cost of selling lumber. Keeping it would mix financing into operations.",
+             recompute: "There is nothing to recompute: interest simply stays out. Lenders enter the valuation once, through debt." },
+    tax:   { ok: "NOP needs the tax on operating profit: 35% of EBIT. The 22 Clarkson paid was on income after interest, under the schedule in note (c).",
+             keep: "The 22 was paid on income after interest, under the schedule in note (c). NOP uses 35% of EBIT, as the assignment says.",
+             out: "Taxes are a real cost of operating. Replace them with 35% of EBIT instead of dropping them." },
+    ni:    { ok: "Net income comes after interest. NOP stops before interest, so net income is not the number we want.",
+             keep: "Net income has interest already taken out. NOP is what operations earn before paying lenders.",
+             recompute: "Don't repair net income. Start from EBIT instead: NOP = EBIT × (1 − 35%)." }
+  };
+
+  // Projection assumptions from the assignment
+  var ASSUME = [
+    { k: "growth", n: "Sales growth", a: "24.5%", y96: "21.7%", y97: "20%" },
+    { k: "cogs", n: "CGS / Sales", a: "75.6%", y96: "75.0%", y97: "74.0%" },
+    { k: "opex", n: "Op. exp. / Sales", a: "20.9%", y96: "20.4%", y97: "20.0%" },
+    { k: "tax", n: "Tax rate", a: "20.5%", y96: "35%", y97: "35%" }
+  ];
+  var SALES96 = 5500;
+
+  // Level 2, step 5: one ratio pick per line of the 1996 pro forma
+  var BUILD = [
+    { k: "cogs", ask: 'Which ratio gives <span class="item">1996 cost of goods sold</span>?', rate: 0.75, cards: [
+      { t: "75.0%", d: "CGS / Sales, 1996 assumption", ok: true,
+        why: "The 1996 assumption. It already includes the 2% trade discounts from paying suppliers within 10 days." },
+      { t: "75.6%", d: "CGS / Sales, 1993–95 average",
+        why: "That is the historical average. The 1996 assumption already reflects the trade discounts, a structural change." },
+      { t: "74.0%", d: "CGS / Sales, 1997 assumption",
+        why: "74.0% applies from 1997 on. For 1996, use the 1996 assumption." } ] },
+    { k: "opex", ask: 'Which ratio gives <span class="item">1996 operating expenses</span>?', rate: 0.204, cards: [
+      { t: "20.4%", d: "Op. exp. / Sales, 1996 assumption", ok: true,
+        why: "The 1996 assumption from the assignment." },
+      { t: "20.9%", d: "Op. exp. / Sales, 1993–95 average",
+        why: "That is the historical average. Use the 1996 assumption from the assignment." },
+      { t: "20.0%", d: "Op. exp. / Sales, 1997 assumption",
+        why: "20.0% applies from 1997 on. For 1996, use the 1996 assumption." } ] },
+    { k: "tax", ask: 'Which tax rate goes on <span class="item">1996 EBIT</span>?', rate: 0.35, cards: [
+      { t: "35%", d: "The assignment’s tax rate", ok: true,
+        why: "The assignment says to use 35% throughout and to ignore the tax schedule in note (c). Apply it to EBIT, not to income after interest." },
+      { t: "20.5%", d: "1993–95 average rate",
+        why: "That is the historical average rate. The assignment says to use 35% throughout." },
+      { t: "22.2%", d: "1995 actual rate (22 / 99)",
+        why: "That is what Clarkson paid on income after interest in 1995. NOP uses 35% of EBIT." } ] }
+  ];
+  function pro() {   // 1996 pro forma, unrounded
+    var cogs = SALES96 * BUILD[0].rate, gp = SALES96 - cogs, opex = SALES96 * BUILD[1].rate, ebit = gp - opex, tax = ebit * BUILD[2].rate;
+    return { sales: SALES96, cogs: cogs, gp: gp, opex: opex, ebit: ebit, tax: tax, nop: ebit - tax };
+  }
+
+  // ---- Level 3 (the Lumber Yard) ----
+  var WHY3 = {
+    ap:  { ok: "Payables are measured in days of purchases: AP = 10 × purchases / 365, with purchases = COGS + the change in inventory.",
+           cogs: "That was last year’s most common mistake (7 teams). The assignment measures payables in days of purchases, not COGS.",
+           sales: "Suppliers bill Clarkson for the lumber it buys, so payables follow purchases, not sales." },
+    inv: { ok: "Inventory is measured in days of COGS: 59.4 days of cost of goods sold.",
+           sales: "Inventory sits on the books at cost, so its ratio runs on COGS, not sales.",
+           purch: "Purchases are what flows in. The inventory ratio runs on COGS (59.4 days); purchases come in for payables." },
+    ar:  { ok: "Customers owe Clarkson for lumber sold on credit: 43.4 days of sales.",
+           cogs: "Receivables are what customers owe at selling prices, so they follow sales, not COGS.",
+           purch: "Purchases drive what Clarkson owes suppliers, not what customers owe Clarkson." },
+    acc: { ok: "Accrued expenses are projected as a share of sales: 1.46%.",
+           cogs: "The assignment ties accrued expenses to sales (1.46%), not to COGS.",
+           purch: "Accrued expenses are wages and other costs, not lumber bills. They follow sales (1.46%)." },
+    ppe: { ok: "Net fixed assets follow sales through the turnover ratio: NFA = sales / 12.5.",
+           cogs: "The fixed-asset turnover is measured on sales: NFA = sales / 12.5.",
+           purch: "Fixed assets are not lumber purchases. NFA = sales / 12.5." }
+  };
+  var ASSUME3 = [
+    { k: "sales", n: "Sales", v: "5,500" }, { k: "cogs", n: "COGS (75.0% of sales)", v: "4,125" },
+    { k: "ar", n: "AR days (on sales)", v: "43.4" }, { k: "inv", n: "Inventory days (on COGS)", v: "59.4" },
+    { k: "nfato", n: "NFA turnover (sales / NFA)", v: "12.5" }, { k: "ap", n: "AP days (on purchases)", v: "10" },
+    { k: "acc", n: "Accrued exp. / sales", v: "1.46%" }
+  ];
+  var BUILD3 = [
+    { hl: "nfato", row: "nfa", ask: 'ΔNFA = 1996 NFA of 440 minus <span class="item">which 1995 NFA</span>?', cards: [
+      { t: "388", d: "Property, net, on the 1995 balance sheet", ok: true,
+        why: "Start from what Clarkson actually owns at the end of 1995. ΔNFA = 440 − 388 = 52." },
+      { t: "362", d: "1995 sales / 12.5",
+        why: "The ratio projects 1996 onward. For 1995 we have the actual balance sheet: 388." },
+      { t: "0", d: "Everything in 1996 is new",
+        why: "Clarkson already owns 388 of fixed assets. Only the increase is new investment." } ] },
+    { hl: "ap", row: "ap", ask: 'Payables run on purchases. What are <span class="item">1996 purchases</span>?', cards: [
+      { t: "4,209", d: "COGS + (ending − beginning inventory) = 4,125 + (671 − 587)", ok: true,
+        why: "To sell 4,125 of lumber and still grow inventory by 84, Clarkson must buy 4,209. AP = 10 × 4,209 / 365 ≈ 115." },
+      { t: "4,125", d: "COGS",
+        why: "That is what Clarkson sells, not what it buys. Inventory grows in 1996, so purchases exceed COGS. Last year 7 teams made this mistake." },
+      { t: "4,041", d: "COGS − (ending − beginning inventory)",
+        why: "Sign flipped. When inventory grows, Clarkson buys more than it sells: add the change." } ] },
+    { hl: "", row: "nowc", ask: 'NOWC jumps from 742 to 1,130. <span class="item">Why so much?</span>', cards: [
+      { t: "Mostly payables", d: "Paying within 10 days cuts AP from 376 to 115", ok: true,
+        why: "Payables fall by about 260 because Clarkson now pays within 10 days to get the 2% discount. Receivables and inventory add only about 130. The discount costs working capital today." },
+      { t: "Mostly sales growth", d: "Receivables and inventory grow with sales",
+        why: "They do grow, but only by about 130 together. The drop in payables adds about 260." },
+      { t: "Cash piles up", d: "More sales bring in more cash",
+        why: "Cash is not in NOWC; it is non-operating. Look at the payables line." } ] }
+  ];
+  function inv3() {   // 1996 investment, unrounded
+    var p = pro(), b = function (k) { return lineIn(BS, k).v; };
+    var nfa96 = SALES96 / 12.5, ar96 = 43.4 * SALES96 / 365, inv96 = 59.4 * p.cogs / 365;
+    var purch = p.cogs + inv96 - b("inv"), ap96 = 10 * purch / 365, acc96 = 0.0146 * SALES96;
+    var nowc95 = b("ar") + b("inv") - b("ap") - b("acc"), nowc96 = ar96 + inv96 - ap96 - acc96;
+    var dnfa = nfa96 - b("ppe"), dnowc = nowc96 - nowc95;
+    return { nfa95: b("ppe"), nfa96: nfa96, ar96: ar96, inv96: inv96, purch: purch, ap96: ap96, acc96: acc96,
+             nowc95: nowc95, nowc96: nowc96, dnfa: dnfa, dnowc: dnowc, fcf: p.nop - dnfa - dnowc };
+  }
+
+  // ---- Level 4 (the River) and the valley's 1996-2000 table ----
+  // FCF 1997-2003 use the same assumptions as 1996 (course solution, Clarkson Part 2 Solution.xlsx; 2000 = 222.02, 2001 = 234.37 unrounded).
+  var FCF_LATER = { 1997: -47.0, 1998: 14.3, 1999: 108.9, 2000: 222.02, 2001: 234.37, 2002: 246.09, 2003: 258.39 };
+  var TABLE5 = { 1997: [257, 88, 216], 1998: [296, 79, 203], 1999: [326, 61, 156], 2000: [342, 33, 86] };   // NOP, ΔNFA, ΔNOWC (Lecture 4, p. 26)
+  var R_DISC = 0.115, G_LONG = 0.05;
+  function riverFcf() { var o = { 1996: inv3().fcf }; Object.keys(FCF_LATER).forEach(function (y) { o[y] = FCF_LATER[y]; }); return o; }
+  function rv2000(g) { return FCF_LATER[2001] / (R_DISC - g); }
+  function pvRv(g) { return rv2000(g) / Math.pow(1 + R_DISC, 5); }
+  function pvFcf() { var F = riverFcf(), t = 0; for (var y = 1996; y <= 2000; y++) t += F[y] / Math.pow(1 + R_DISC, y - 1995); return t; }
+  function nonopVal() { return BS.filter(function (L) { return L.cls === "nonop"; }).reduce(function (t, L) { return t + L.v; }, 0); }
+  function debtVal() { return BS.filter(function (L) { return L.cls === "debt"; }).reduce(function (t, L) { return t + L.v; }, 0); }
+  function evVal() { return pvFcf() + pvRv(G_LONG); }
+  function eqVal() { return evVal() + nonopVal() - debtVal(); }
+  function mult(x) { return (evVal() / x).toFixed(2); }
+
+  // Per-level settings for the shared steps (1: statement, 2-4: one line at a time)
+  var LV = {
+    1: {
+      stmt: { answer: "balance",
+        prompt: 'Mr. Clarkson wants his <span class="item">non-operating assets</span> and his <span class="item">debt</span>. Which statement do you use?',
+        wrong: "The income statement shows what happened during 1995, like the interest Clarkson paid. Debt and cash are amounts on one date, so they are on the balance sheet.",
+        ok: "Debt and cash are amounts at December 31, 1995, so they come from the balance sheet." },
+      sheet: BS, sheetTitle: "Exhibit 2 · Balance sheet<small>Dec 31, 1995, $ thousands</small>",
+      cats: [
+        { k: "debt", n: "Debt", d: "An interest-bearing claim on the firm" },
+        { k: "nonop", n: "Non-operating asset", d: "Owned, but not needed to run the business" },
+        { k: "op", n: "Operating", d: "Part of running the lumber business" } ],
+      why: WHY1,
+      draw: function () {
+        var a = pick(["npt", "nph", "tlc"]), b = pick(["ap", "acc", "ar", "inv", "ppe"]);
+        var rest = ["cash", "npb", "tl", "ap", "acc", "ar", "inv", "ppe", "npt", "nph", "tlc"].filter(function (k) { return k !== a && k !== b; });
+        return shuffle([a, b, pick(rest)]);
+      },
+      itemAsk: function (Ln) { return '<span class="item">' + esc(Ln.n) + "</span>, $" + fmt(Ln.v) + " thousand. What is it?"; },
+      itemSub: "It’s highlighted in the balance sheet.",
+      finish: "Finish the Vault",
+      won: "You found what Mr. Clarkson owns that the business doesn’t need, and everything he owes. His balance sheet is filling in."
+    },
+    2: {
+      stmt: { answer: "income",
+        prompt: 'Mr. Clarkson wants his <span class="item">net operating profit</span> (NOP). Which statement do you use?',
+        wrong: "The balance sheet shows amounts on one date. Profit is earned over a year, so NOP comes from the income statement.",
+        ok: "NOP is earned over the year: sales minus operating costs and taxes. You only need the income statement." },
+      sheet: IS, sheetTitle: "Exhibit 1 · Income statement<small>1995, $ thousands</small>",
+      cats: [
+        { k: "keep", n: "Keep", d: "Part of operations; it stays in NOP" },
+        { k: "out", n: "Leave out", d: "Financing, or below operating profit" },
+        { k: "recompute", n: "Recompute", d: "Replace it with our own number" } ],
+      why: WHY2,
+      draw: function () { return shuffle(["int", "tax", pick(["sales", "cogs", "opex", "ni"])]); },
+      itemAsk: function (Ln) { return 'Turning 1995 into NOP: what do you do with <span class="item">' + esc(Ln.n) + "</span> ($" + fmt(Ln.v) + " thousand)?"; },
+      itemSub: "It’s highlighted in the income statement.",
+      finish: "Finish the Mill",
+      won: "You turned the income statement into NOP and built 1996 with the right ratios. It’s on Mr. Clarkson’s free cash flow sheet.",
+      build: BUILD, buildSub: "Final step: build 1996 NOP, one line at a time. Sales of 5,500 are given.",
+      table: function () { return buildTable(); }, panel: function () { return assumePanel(BUILD[run.bi].k); },
+      lastExtra: function () { var p = pro(); return " So 1996 NOP = " + fmt(Math.round(p.ebit)) + " × (1 − 35%) ≈ <strong>" + fmt(Math.round(p.nop)) + "</strong>. Interest never came in."; }
+    },
+    3: {
+      stmt: { answer: "both", multi: true,
+        prompt: 'For <span class="item">ΔNFA</span> and <span class="item">ΔNOWC</span>, which statements do you need? You can pick one or both.',
+        onlyBalance: "The balance sheet gives the 1995 levels. But the ratios run on sales, COGS and purchases, and those come from the income statement.",
+        onlyIncome: "The income statement gives sales, COGS and purchases. But a change needs a starting level, and the 1995 levels are on the balance sheet.",
+        ok: "Both: the balance sheet gives the 1995 levels, and the income statement gives what drives them: sales, COGS and purchases." },
+      sheet: BS, sheetTitle: "Exhibit 2 · Balance sheet<small>Dec 31, 1995, $ thousands</small>", key: "drv",
+      cats: [
+        { k: "sales", n: "Sales", d: "The ratio is applied to sales" },
+        { k: "cogs", n: "COGS", d: "The ratio is applied to cost of goods sold" },
+        { k: "purch", n: "Purchases", d: "The ratio is applied to lumber bought in the year" } ],
+      why: WHY3,
+      draw: function () { return shuffle(["ap", "inv", pick(["ar", "acc", "ppe"])]); },
+      itemAsk: function (Ln) { return 'What drives 1996 <span class="item">' + esc(Ln.n.replace(", net", "").toLowerCase()) + "</span>?"; },
+      itemSub: "It’s highlighted in the balance sheet. Pick the base its ratio is applied to.",
+      finish: "Finish the Lumber Yard",
+      won: "You found what Clarkson must invest in 1996: 52 in the yard and 388 in working capital. His 1996 free cash flow is complete.",
+      build: BUILD3, buildSub: "Final step: build Clarkson’s 1996 investment.",
+      table: function () { return invTable(); }, panel: function () { return assume3Panel(BUILD3[run.bi].hl); },
+      lastExtra: function () { var q = inv3(); return " So FCF 1996 = NOP " + fmt(Math.round(pro().nop)) + " − ΔNFA " + fmt(Math.round(q.dnfa)) + " − ΔNOWC " + fmt(Math.round(q.dnowc)) + " ≈ <strong>" + signed(Math.round(q.fcf)) + "</strong>."; }
+    },
+    4: {
+      river: true, startYear: 2001,
+      intro: 'The yard keeps going after 2000. <span class="item">Click the first year</span> from which FCF grows at a constant rate.',
+      yearWhy: {
+        early: "FCF is still changing fast here, while sales growth slows from 21.7% to 5%. Look for where the growth rate stops changing.",
+        y2000: "From 2000 to 2001, FCF grows 5.56%, not 5%: working capital is still catching up with the slowdown. Constant growth starts with 2001.",
+        late: "FCF does grow at 5% from here, but it already did from 2001. The first year of constant growth is 2001.",
+        ok: "From 2001 on, FCF grows at a constant 5%. So the perpetuity starts with FCF 2001: the gold bar."
+      },
+      quiz: [
+        { ask: 'RV = <span class="item">?</span> / (r − g). Which cash flow goes on top?', sub: "r = 11.5%. The gold bar is the first cash flow of the perpetuity.", cards: [
+          { t: "234", d: "FCF 2001, the first cash flow of the perpetuity", ok: true,
+            why: "The formula needs the first cash flow of the perpetuity: FCF 2001 = 234." },
+          { t: "233", d: "FCF 2000 × 1.05",
+            why: "That assumes FCF grows 5% from 2000. It actually grows 5.56% in 2001, so use the projected FCF 2001." },
+          { t: "222", d: "FCF 2000, the last year of the forecast",
+            why: "222 is the last year of the explicit forecast. The perpetuity starts one year later, with FCF 2001." } ] },
+        { ask: 'Which growth rate <span class="item">g</span>?', sub: "Discount rate r = 11.5%.", cards: [
+          { t: "5%", d: "Long-run sales growth after 2000", ok: true,
+            why: "From 2001 on, everything grows with sales at 5%, and so does FCF." },
+          { t: "5.56%", d: "FCF growth from 2000 to 2001",
+            why: "That is a one-time step while working capital adjusts. From 2001 on, FCF grows at 5%." },
+          { t: "24.5%", d: "Sales growth, 1993–95",
+            why: "That is history, and it is above r = 11.5%: the formula would give a negative value. Long-run growth must stay below r." } ] },
+        { ask: '234 / (11.5% − 5%) = <span class="item">3,606</span>. A value as of when?', sub: "Look at the gold bar.", cards: [
+          { t: "End of 2000", d: "One year before the first cash flow", ok: true,
+            why: "FCF / (r − g) is a value one year before the first cash flow: 2001 − 1 = 2000. So RV₂₀₀₀ = 3,606." },
+          { t: "End of 2001", d: "The year of the first cash flow",
+            why: "The formula values cash flows that start one year later. With FCF 2001 on top, the value is dated 2000." },
+          { t: "End of 1995", d: "Today",
+            why: "The formula does not discount back to today by itself. It gives a value one year before the first cash flow: 2000." } ] },
+        { ask: 'Bring <span class="item">3,606</span> back to December 31, 1995.', sub: "r = 11.5%.", cards: [
+          { t: "2,092", d: "3,606 / 1.115⁵", ok: true,
+            why: "From the end of 2000 back to the end of 1995 is 5 years: 3,606 / 1.115⁵ ≈ 2,092." },
+          { t: "1,876", d: "3,606 / 1.115⁶",
+            why: "One year too many. The value is dated 2000, five years after 1995." },
+          { t: "2,333", d: "3,606 / 1.115⁴",
+            why: "One year short: 2000 is five years after 1995, not four." } ] }
+      ],
+      finish: "Finish the River",
+      won: "You found what everything after 2000 is worth: 3,606 at the end of 2000, or 2,092 today. And one point of g moves it by hundreds."
+    },
+    5: { match: true, finish: "Count it all up" }
+  };
+
+  // ---- Level 5 (the Counting House): five matching steps ----
+  var YEARS5 = [1996, 1997, 1998, 1999, 2000];
+  function m5() {
+    var F = riverFcf(), r = function (v) { return signed(Math.round(v)); };
+    return [
+      { ask: 'Discount the forecast. Put each <span class="item">FCF</span> over its year.', sub: "Drag a card onto a slot, or tap a card and then a slot. Tap a filled slot to take the card back.",
+        slots: YEARS5.map(function (y) { return { id: "n" + y, ans: "f" + y }; }),
+        cards: YEARS5.concat([2001]).map(function (y) { return { id: "f" + y, t: r(F[y]) }; }),
+        hints: { f2001: "234 is FCF 2001, the first cash flow of the perpetuity. It is already inside the residual value." },
+        generic: "Match each FCF to its year; the table on the right has them.",
+        ok: "Each year’s cash flow sits over its own discount factor." },
+      { ask: 'Now the exponents: how many years is each cash flow <span class="item">from today</span>, the end of 1995?', sub: "Type T into each small box, then check (or press Enter).", typing: true,
+        slots: YEARS5.map(function (y) { return { id: "t" + y, ans: y - 1995 }; }),
+        cards: [],
+        hints: { x0: "T counts years from the end of 1995. 1996 is one year away, so its T is 1.", x6: "2000 is five years after 1995, so the largest T is 5.",
+                 big: "T is a number of years from the end of 1995, not the year itself." },
+        generic: "Count the years from the end of 1995 to each cash flow.",
+        ok: "T counts years from today: 1996 is T = 1 and 2000 is T = 5.",
+        result: function () { return " So PV(FCF 1996–2000) = <strong>" + r(pvFcf()) + "</strong>."; } },
+      { ask: 'Enterprise value: what adds up to <span class="item">EV</span>?', sub: "Two cards. Use the panel on the right.", anyOrder: true,
+        slots: [{ id: "e1", ans: "pv" }, { id: "e2", ans: "pvrv" }],
+        cards: [{ id: "pv", t: r(pvFcf()) }, { id: "pvrv", t: r(pvRv(G_LONG)) }, { id: "rv", t: r(rv2000(G_LONG)) }, { id: "f00", t: r(F[2000]) }],
+        hints: { rv: "3,606 is the residual value at the end of 2000. Bring it to today first.", f00: "222 is FCF 2000. It is already inside −75, the present value of 1996–2000." },
+        generic: "EV is everything the operations will generate, valued today.",
+        ok: "EV = PV of the 1996–2000 cash flows + PV of the residual value.",
+        result: function () { return " EV = <strong>" + r(evVal()) + "</strong>."; } },
+      { ask: 'And what is the business worth to <span class="item">Mr. Clarkson</span>?', sub: "The signs are given. Three cards.",
+        slots: [{ id: "q1", ans: "ev" }, { id: "q2", ans: "cash" }, { id: "q3", ans: "debt" }],
+        cards: [{ id: "ev", t: r(evVal()) }, { id: "cash", t: r(nonopVal()) }, { id: "debt", t: r(debtVal()) }, { id: "tl", t: "1,188" }, { id: "nw", t: "449" }],
+        hints: { tl: "1,188 is total liabilities. Payables and accrued expenses are operating; debt is 737.", nw: "449 is book net worth. The market value of equity is what you are computing." },
+        swap: function (pl) { return pl.q2 === "debt" || pl.q3 === "cash" ? "Cash adds to what the owners have; debt comes out." : ""; },
+        generic: "Start from EV, add what the owners own on the side, take out what they owe.",
+        ok: "Equity = EV + non-operating assets − debt.",
+        result: function () { return " Equity = <strong>" + r(eqVal()) + "</strong>."; } },
+      { ask: 'Finally, <span class="item">forward</span> multiples as a sanity check.', sub: "Two cards. Use the panel on the right.",
+        slots: [{ id: "m1", ans: "s96" }, { id: "m2", ans: "e96" }],
+        cards: [{ id: "s96", t: "5,500" }, { id: "e96", t: "253" }, { id: "s95", t: "4,519" }, { id: "e95", t: "155" }, { id: "s00", t: "8,766" }, { id: "e00", t: "526" }],
+        hints: { s95: "4,519 is 1995 sales: a trailing multiple. Forward means next year, 1996.", e95: "155 is 1995 EBIT: a trailing multiple. Forward means next year, 1996.",
+                 s00: "8,766 is 2000 sales. Forward means the first forecast year, 1996.", e00: "526 is 2000 EBIT. Forward means the first forecast year, 1996." },
+        swap: function (pl) { return pl.m1 === "e96" || pl.m2 === "s96" ? "Sales go under EV / Sales, EBIT under EV / EBIT." : ""; },
+        generic: "Forward multiples divide today’s EV by next year’s numbers.",
+        ok: "Forward multiples use the first forecast year, 1996.",
+        result: function () { return " EV / Sales = <strong>" + mult(SALES96) + "×</strong> and EV / EBIT = <strong>" + mult(pro().ebit) + "×</strong>, plausible for a small lumber distributor."; } }
+    ];
+  }
+
+  // ======================= state =======================
+  function freshSave() { return { coins: START_COINS, inv: { glass: 0, hat: 0, snack: 0 }, done: {}, deaths: 0, clears: 0, pop: 0 }; }
+  var save = loadSave() || freshSave();
+  var run = null;
+  var view = "title";
+  var shopMsg = "";
+
+  var musicOn = false;
+  try { musicOn = localStorage.getItem(MUSIC_KEY) === "on"; } catch (e) { musicOn = false; }
+  var CREDIT = 'Music: “apple cider” by Zane Little Music (<a href="https://opengameart.org/content/apple-cider" target="_blank" rel="noopener">OpenGameArt</a>, CC0). Final level: “Video Dungeon Boss” by Kevin MacLeod (<a href="https://incompetech.com" target="_blank" rel="noopener">incompetech.com</a>), licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>';
+  // the cozy track everywhere, the boss track in the final level (and its shop)
+  function track() { return (view === "level" || view === "shop") && run && run.level === 5 ? "bgm-boss" : "bgm"; }
+  function syncMusic() {
+    var want = track();
+    ["bgm", "bgm-boss"].forEach(function (id) {
+      var a = document.getElementById(id); if (!a) return;
+      if (musicOn && id === want) {
+        a.volume = id === "bgm-boss" ? 0.3 : 0.35;
+        if (a.paused) { var p = a.play(); if (p && p.catch) p.catch(function () { /* blocked until the next click */ }); }
+      } else if (!a.paused) a.pause();
+    });
+  }
+  function playMusic() { syncMusic(); }
+  function toggleMusic() {
+    musicOn = !musicOn;
+    try { localStorage.setItem(MUSIC_KEY, musicOn ? "on" : "off"); } catch (e) { /* choice lasts for this visit */ }
+    render();
+  }
+  // browsers only allow sound after a click: if music was left on, start it with the first click
+  document.addEventListener("pointerdown", function once() {
+    document.removeEventListener("pointerdown", once);
+    if (musicOn) playMusic();
+  });
+
+  function loadSave() { try { var s = localStorage.getItem(SAVE_KEY); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
+  function persist() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) { /* progress lasts for this visit only */ } }
+
+  // ======================= helpers =======================
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function fmt(n) { return Number(n).toLocaleString("en-US"); }
+  function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+  function signed(n) { return n < 0 ? "−" + fmt(-n) : fmt(n); }
+  function lineIn(sheet, k) { for (var i = 0; i < sheet.length; i++) if (sheet[i].k === k) return sheet[i]; return null; }
+  function unlocked(L) { return L.built && (L.id === 1 || !!save.done[L.id - 1]); }
+  function cfg() { return LV[run.level]; }
+
+  // ======================= art =======================
+  function lion(mood, cls) {
+    var mane = "";
+    for (var i = 0; i < 14; i++) {
+      var a = (i / 14) * Math.PI * 2;
+      mane += '<circle cx="' + (50 + Math.cos(a) * 31).toFixed(1) + '" cy="' + (50 + Math.sin(a) * 31).toFixed(1) + '" r="13" fill="var(--mane)"/>';
+    }
+    var eyes, mouth;
+    if (mood === "oops") {
+      eyes = '<path d="M36 47l7 4-7 4M64 47l-7 4 7 4" fill="none" stroke="var(--navy)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>';
+      mouth = '<ellipse cx="50" cy="69" rx="3.2" ry="3.8" fill="#7a3f22"/>';
+    } else if (mood === "cheer") {
+      eyes = '<path d="M36 52q4-6 8 0M56 52q4-6 8 0" fill="none" stroke="var(--navy)" stroke-width="2.8" stroke-linecap="round"/>';
+      mouth = '<path d="M43 65q7 9 14 0z" fill="#7a3f22"/><path d="M46.5 69q3.5 2.6 7 0" fill="#f28b8b"/>';
+    } else {
+      eyes = '<circle cx="40" cy="51" r="4" fill="var(--navy)"/><circle cx="60" cy="51" r="4" fill="var(--navy)"/>' +
+             '<circle cx="41.4" cy="49.6" r="1.3" fill="#fff"/><circle cx="61.4" cy="49.6" r="1.3" fill="#fff"/>';
+      mouth = '<path d="M50 64q-3 5-7 3M50 64q3 5 7 3" fill="none" stroke="#7a3f22" stroke-width="2" stroke-linecap="round"/>';
+    }
+    return '<svg class="' + (cls || "") + '" viewBox="0 0 100 100" aria-hidden="true">' + mane +
+      '<circle cx="29" cy="27" r="9" fill="var(--fur)"/><circle cx="29" cy="27" r="4.5" fill="#f2a9a0"/>' +
+      '<circle cx="71" cy="27" r="9" fill="var(--fur)"/><circle cx="71" cy="27" r="4.5" fill="#f2a9a0"/>' +
+      '<circle cx="50" cy="53" r="27" fill="var(--fur)"/>' +
+      '<ellipse cx="50" cy="64" rx="12.5" ry="9.5" fill="#fff4dc"/>' +
+      '<ellipse cx="33.5" cy="60" rx="4.5" ry="3" fill="#f5a3a3" opacity=".75"/><ellipse cx="66.5" cy="60" rx="4.5" ry="3" fill="#f5a3a3" opacity=".75"/>' +
+      eyes + '<path d="M45.5 58.5h9q-1 4.6-4.5 5.6-3.5-1-4.5-5.6z" fill="#7a3f22"/>' + mouth +
+      '<path d="M27 78q23 13 46 0l2 8q-25 14-50 0z" fill="var(--cu-blue)" stroke="var(--blue)" stroke-width="1.5"/>' +
+      '<path d="M62 84l7 12 5-3-4-11z" fill="var(--cu-blue)" stroke="var(--blue)" stroke-width="1.5"/></svg>';
+  }
+  function owner(cls) {
+    return '<svg class="' + (cls || "") + '" viewBox="0 0 100 100" aria-hidden="true">' +
+      '<circle cx="50" cy="50" r="48" fill="var(--wood-soft)"/>' +
+      '<circle cx="50" cy="56" r="25" fill="#f3c9a1"/>' +
+      '<path d="M27 58q2 26 23 26t23-26q-6 9-23 9t-23-9z" fill="#8a5a36"/>' +
+      '<circle cx="41" cy="54" r="3" fill="var(--navy)"/><circle cx="59" cy="54" r="3" fill="var(--navy)"/>' +
+      '<path d="M43 68q7 4 14 0" fill="none" stroke="#5b3a22" stroke-width="2" stroke-linecap="round"/>' +
+      '<path d="M22 41q0-21 28-21t28 21z" fill="var(--gold)"/><rect x="18" y="39" width="64" height="7" rx="3.5" fill="var(--gold-dark)"/>' +
+      '<rect x="46" y="21" width="8" height="18" rx="3" fill="#f7cd66"/></svg>';
+  }
+  function heart(full) {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.4-4.5-9.6-9.1C.9 8.5 2.9 4.6 6.6 4.6c2.1 0 3.5 1.1 4.4 2.5.9-1.4 2.3-2.5 4.4-2.5 3.7 0 5.7 3.9 4.2 7.3C19.4 16.5 12 21 12 21z" fill="' +
+      (full ? "var(--heart)" : "none") + '" stroke="' + (full ? "var(--heart)" : "#c9d6e3") + '" stroke-width="1.6"/></svg>';
+  }
+  function coin() {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="var(--gold)"/><circle cx="12" cy="12" r="6.6" fill="none" stroke="var(--gold-dark)" stroke-width="1.6"/><path d="M12 8.5v7" stroke="var(--gold-dark)" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  }
+  function toolIcon(k) {
+    if (k === "glass") return '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="17" cy="17" r="10" fill="#e8f4ff" stroke="var(--blue)" stroke-width="3.2"/><path d="M25 25l9 9" stroke="var(--wood)" stroke-width="5" stroke-linecap="round"/><path d="M12 14q2-4 6-4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>';
+    if (k === "hat") return '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M7 26q0-15 13-15t13 15z" fill="var(--gold)"/><rect x="4" y="25" width="32" height="6" rx="3" fill="var(--gold-dark)"/><rect x="17" y="9" width="6" height="15" rx="2.5" fill="#f9d46e"/></svg>';
+    return '<svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="27" rx="14" ry="7" fill="var(--wood-soft)" stroke="var(--wood)" stroke-width="2"/><circle cx="14" cy="21" r="5" fill="var(--heart)"/><circle cx="22" cy="19" r="5.5" fill="#f28b3c"/><circle cx="27" cy="23" r="4.5" fill="var(--leaf)"/></svg>';
+  }
+  function catIcon(k) {
+    if (k === "debt") return '<svg viewBox="0 0 34 34" aria-hidden="true"><rect x="5" y="6" width="24" height="22" rx="4" fill="#e3f1ea" stroke="var(--bs-debt)" stroke-width="2"/><text x="17" y="22" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="11" fill="var(--bs-debt)">IOU</text></svg>';
+    if (k === "nonop") return '<svg viewBox="0 0 34 34" aria-hidden="true"><ellipse cx="17" cy="19" rx="12" ry="9" fill="#fbe2d4" stroke="var(--bs-nonop)" stroke-width="2"/><circle cx="12" cy="17" r="1.6" fill="var(--bs-nonop)"/><rect x="14" y="8" width="7" height="3" rx="1.5" fill="var(--bs-nonop)"/><path d="M10 27v3M24 27v3" stroke="var(--bs-nonop)" stroke-width="2.4" stroke-linecap="round"/></svg>';
+    if (k === "op") return '<svg viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="11" fill="#e6effa" stroke="var(--blue)" stroke-width="2"/><g fill="var(--blue)"><rect x="15.5" y="3" width="3" height="6" rx="1"/><rect x="15.5" y="25" width="3" height="6" rx="1"/><rect x="3" y="15.5" width="6" height="3" rx="1"/><rect x="25" y="15.5" width="6" height="3" rx="1"/></g><circle cx="17" cy="17" r="4" fill="var(--card)" stroke="var(--blue)" stroke-width="2"/></svg>';
+    if (k === "keep") return '<svg viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="12" fill="#e6effa" stroke="var(--blue)" stroke-width="2"/><path d="M11 17.5l4 4 8-9" fill="none" stroke="var(--blue)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    if (k === "out") return '<svg viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="12" fill="var(--oops-soft)" stroke="var(--oops)" stroke-width="2"/><path d="M11 17h12" stroke="var(--oops)" stroke-width="2.8" stroke-linecap="round"/></svg>';
+    return '<svg viewBox="0 0 34 34" aria-hidden="true"><rect x="8" y="4" width="18" height="26" rx="3.5" fill="#fff4dc" stroke="var(--gold-dark)" stroke-width="2"/><rect x="11" y="7.5" width="12" height="5" rx="1" fill="var(--gold-dark)"/><g fill="var(--gold-dark)"><circle cx="13" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/><circle cx="21" cy="18" r="1.6"/><circle cx="13" cy="23.5" r="1.6"/><circle cx="17" cy="23.5" r="1.6"/><circle cx="21" cy="23.5" r="1.6"/></g></svg>';
+  }
+  function stopIcon(k) {
+    var c = "var(--blue-dark)";
+    if (k === "vault") return '<svg viewBox="0 0 30 30" aria-hidden="true"><rect x="4" y="5" width="22" height="20" rx="4" fill="none" stroke="' + c + '" stroke-width="2.4"/><circle cx="15" cy="15" r="5" fill="none" stroke="' + c + '" stroke-width="2.2"/><path d="M15 10v2M15 18v2M10 15h2M18 15h2" stroke="' + c + '" stroke-width="2"/></svg>';
+    if (k === "mill") return '<svg viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="9" fill="none" stroke="' + c + '" stroke-width="2.4" stroke-dasharray="3.2 2.2"/><circle cx="15" cy="15" r="3" fill="' + c + '"/></svg>';
+    if (k === "logs") return '<svg viewBox="0 0 30 30" aria-hidden="true"><g fill="none" stroke="' + c + '" stroke-width="2.2"><circle cx="9" cy="20" r="4.5"/><circle cx="21" cy="20" r="4.5"/><circle cx="15" cy="11" r="4.5"/></g></svg>';
+    if (k === "river") return '<svg viewBox="0 0 30 30" aria-hidden="true"><path d="M4 11q4-4 8 0t8 0 8 0M4 18q4-4 8 0t8 0 8 0" fill="none" stroke="' + c + '" stroke-width="2.4" stroke-linecap="round"/></svg>';
+    return '<svg viewBox="0 0 30 30" aria-hidden="true"><g fill="none" stroke="' + c + '" stroke-width="2.2"><ellipse cx="15" cy="22" rx="8" ry="3"/><ellipse cx="15" cy="16" rx="8" ry="3"/><ellipse cx="15" cy="10" rx="8" ry="3"/></g></svg>';
+  }
+  function noteIcon(on) {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 17.5V6.2l10-2.2v11" fill="none" stroke="var(--blue-dark)" stroke-width="2" stroke-linejoin="round"/>' +
+      '<ellipse cx="6.6" cy="17.6" rx="2.9" ry="2.3" fill="var(--blue-dark)"/><ellipse cx="16.6" cy="15.3" rx="2.9" ry="2.3" fill="var(--blue-dark)"/>' +
+      (on ? "" : '<path d="M3 3l18 18" stroke="var(--oops)" stroke-width="2.2" stroke-linecap="round"/>') + "</svg>";
+  }
+  function musicBtn() {
+    return '<button class="pill toolbtn music' + (musicOn ? " on" : "") + '" data-act="music" aria-pressed="' + (musicOn ? "true" : "false") + '" title="Music on or off">' + noteIcon(musicOn) + (musicOn ? "On" : "Off") + "</button>";
+  }
+  function lockIcon() { return '<svg viewBox="0 0 30 30" aria-hidden="true"><rect x="7" y="13" width="16" height="12" rx="3" fill="#c9d6e3"/><path d="M10 13v-3a5 5 0 0 1 10 0v3" fill="none" stroke="#c9d6e3" stroke-width="2.6"/></svg>'; }
+  function starIcon() { return '<svg viewBox="0 0 30 30" aria-hidden="true"><path d="M15 4l3.3 6.9 7.5 1-5.5 5.2 1.4 7.5L15 21l-6.7 3.6 1.4-7.5-5.5-5.2 7.5-1z" fill="var(--gold)" stroke="var(--gold-dark)" stroke-width="1.2"/></svg>'; }
+  function banner() {
+    return '<svg class="banner" viewBox="0 0 1000 170" preserveAspectRatio="xMidYMax slice" aria-hidden="true">' +
+      '<circle class="sun" cx="860" cy="52" r="28"/>' +
+      '<g class="cloud"><ellipse cx="170" cy="48" rx="46" ry="14"/><ellipse cx="200" cy="38" rx="28" ry="16"/><ellipse cx="560" cy="34" rx="38" ry="11"/><ellipse cx="585" cy="27" rx="22" ry="12"/></g>' +
+      '<path class="far" d="M0 118C120 72 240 70 360 102S600 62 740 84 930 78 1000 92V170H0z"/>' +
+      '<g class="pine"><path d="M300 112l10-24 10 24z"/><path d="M318 114l8-19 8 19z"/><path d="M770 100l9-22 9 22z"/><path d="M786 103l7-17 7 17z"/></g>' +
+      '<path class="mid" d="M0 140C150 100 260 124 400 134S640 104 800 118 960 120 1000 124V170H0z"/>' +
+      '<g class="pine"><path d="M120 128l11-26 11 26z"/><path d="M600 124l10-24 10 24z"/><path d="M617 127l8-19 8 19z"/></g>' +
+      '<path class="near" d="M0 160C200 136 380 150 520 154S820 140 1000 150V170H0z"/></svg>';
+  }
+
+  // ======================= flow =======================
+  function goHub() { run = null; view = save.email ? "hub" : "title"; render(); }   // no email yet: ask for it first
+  function openShop(level) { view = "shop"; shopMsg = ""; run = { level: level }; render(); }
+
+  function buy(k) {
+    var t = TOOLS[k];
+    if (save.coins < t.price) { shopMsg = "Not enough coins for the " + t.name.toLowerCase() + " yet."; render(); return; }
+    save.coins -= t.price; save.inv[k] = (save.inv[k] || 0) + 1; persist();
+    shopMsg = "Got it: " + t.name.toLowerCase() + ".";
+    render();
+  }
+
+  function startLevel(level) {
+    var maxHp = BASE_HP;
+    if (save.inv.snack > 0) { save.inv.snack -= 1; maxHp += 1; persist(); }
+    run = { level: level, step: 0, items: LV[level].draw ? LV[level].draw() : [], hp: maxHp, maxHp: maxHp, earned: 0, misses: 0, gtry: 5,
+            answered: false, verdict: null, wrong: [], crossed: null, missedHere: false, mood: "happy",
+            pass: "nonop", sel: {}, tagged: {}, bi: 0, order: null, stmtSel: {}, place: {}, selCard: null, locked: {}, typed: {}, cardOrder: null, ouch: false };
+    if (LV[level].match) run.cardOrder = shuffle(m5()[0].cards.map(function (c) { return c.id; }));
+    view = "level"; render();
+  }
+
+  function resetStepState() { run.answered = false; run.verdict = null; run.wrong = []; run.crossed = null; run.missedHere = false; run.mood = "happy"; }
+
+  function loseHeart() {
+    if (save.inv.hat > 0) { save.inv.hat -= 1; persist(); return "The hard hat takes the hit. No heart lost."; }
+    run.hp -= 1; run.ouch = true; return null;
+  }
+  function award(n) { save.coins += n; run.earned += n; persist(); return n; }
+  function miss(text) {
+    run.misses += 1; run.missedHere = true; run.mood = "oops";
+    var saved = loseHeart();
+    run.verdict = { good: false, html: text + (saved ? " " + esc(saved) : "") };
+    if (run.hp <= 0) { die(); return; }
+    render();
+  }
+  function hit(title, text) {
+    var g = award(run.missedHere ? 3 : 10);
+    run.answered = true; run.mood = "cheer";
+    run.verdict = { good: true, html: "<strong>" + title + "</strong> " + text + gainHtml(g) };
+    render(); focusNext();
+  }
+
+  // step 1: which statement (Level 3: pick one or both, then check)
+  function toggleStmt(which) {
+    if (run.answered || run.step !== 0) return;
+    run.stmtSel[which] = !run.stmtSel[which];
+    render();
+  }
+  function checkStmt() {
+    if (run.answered || run.step !== 0) return;
+    var s = cfg().stmt, inc = !!run.stmtSel.income, bal = !!run.stmtSel.balance;
+    if (!inc && !bal) { run.verdict = { good: false, html: "<strong>Pick a table first.</strong> Click one or both, then check." }; render(); return; }
+    if (inc && bal) return hit("Yes!", esc(s.ok));
+    miss("<strong>Not quite.</strong> " + esc(bal ? s.onlyBalance : s.onlyIncome));
+  }
+  function answerStatement(which) {
+    if (run.answered || run.step !== 0) return;
+    var s = cfg().stmt;
+    if (s.multi) return toggleStmt(which);
+    if (which !== s.answer) {
+      if (run.wrong.indexOf(which) >= 0) return;
+      run.wrong.push(which);
+      return miss("<strong>Not this one.</strong> " + esc(s.wrong));
+    }
+    hit("Yes!", esc(s.ok));
+  }
+
+  // steps 2-4: one line at a time
+  function answerCat(cat) {
+    if (run.answered || run.step < 1 || run.step > 3) return;
+    var key = run.items[run.step - 1], Ln = lineIn(cfg().sheet, key), why = cfg().why[key];
+    if (run.wrong.indexOf(cat) >= 0 || run.crossed === cat) return;
+    if (cat !== Ln[cfg().key || "cls"]) { run.wrong.push(cat); return miss("<strong>Oops.</strong> " + esc(why[cat])); }
+    hit("Right!", esc(why.ok));
+  }
+
+  // Levels 2-3, step 5: picks that build a table
+  function answerBuild(slot) {
+    var C = cfg();
+    if (!C.build || run.step !== 4 || run.answered) return;
+    var ci = run.order[slot]; if (ci === undefined) return;
+    var c = C.build[run.bi].cards[ci];
+    if (run.wrong.indexOf(ci) >= 0 || run.crossed === ci) return;
+    if (!c.ok) { run.wrong.push(ci); return miss("<strong>Oops.</strong> " + esc(c.why)); }
+    hit("Right!", esc(c.why) + (run.bi === C.build.length - 1 ? C.lastExtra() : ""));
+  }
+
+  // Level 4: click a year, then four card questions
+  function answerYear(y) {
+    var C = cfg();
+    if (!C.river || run.step !== 0 || run.answered || run.wrong.indexOf(y) >= 0) return;
+    if (y !== C.startYear) {
+      run.wrong.push(y);
+      return miss("<strong>Not this one.</strong> " + esc(y < 2000 ? C.yearWhy.early : (y === 2000 ? C.yearWhy.y2000 : C.yearWhy.late)));
+    }
+    hit("Yes!", esc(C.yearWhy.ok));
+  }
+  function answerQuiz(slot) {
+    var C = cfg();
+    if (!C.quiz || run.step < 1 || run.answered) return;
+    var ci = run.order[slot]; if (ci === undefined) return;
+    var c = C.quiz[run.step - 1].cards[ci];
+    if (run.wrong.indexOf(ci) >= 0 || run.crossed === ci) return;
+    if (!c.ok) { run.wrong.push(ci); return miss("<strong>Oops.</strong> " + esc(c.why)); }
+    hit("Right!", esc(c.why));
+  }
+
+  // Level 5: place cards in slots, then check
+  function mStep() { return m5()[run.step]; }
+  function cardById(id) { var c = mStep().cards.filter(function (k) { return k.id === id; }); return c[0] || null; }
+  function placeCard(cardId, slotId) {
+    if (run.answered || run.locked[slotId] || !cardById(cardId)) return;
+    Object.keys(run.place).forEach(function (k) { if (run.place[k] === cardId && !run.locked[k]) delete run.place[k]; });
+    if (Object.keys(run.place).some(function (k) { return run.place[k] === cardId; })) return;   // locked elsewhere
+    run.place[slotId] = cardId; run.selCard = null; run.verdict = null;
+    render();
+  }
+  function clickCard(id) { if (run.answered) return; run.selCard = run.selCard === id ? null : id; render(); }
+  function clickSlot(id) {
+    if (run.answered || run.locked[id]) return;
+    if (run.selCard) return placeCard(run.selCard, id);
+    if (run.place[id]) { delete run.place[id]; render(); }
+  }
+  function checkMatch() {
+    if (run.answered) return;
+    var M = mStep(), pl = run.place;
+    var empty = M.slots.filter(function (sl) { return !pl[sl.id]; }).length;
+    if (empty) { run.verdict = { good: false, html: "<strong>Fill every slot first.</strong> " + empty + (empty === 1 ? " slot is" : " slots are") + " still empty." }; render(); return; }
+    var wrong;
+    if (M.anyOrder) {
+      var want = M.slots.map(function (sl) { return sl.ans; });
+      wrong = M.slots.filter(function (sl) { return want.indexOf(pl[sl.id]) < 0; }).length;
+    } else wrong = M.slots.filter(function (sl) { return pl[sl.id] !== sl.ans; }).length;
+    if (!wrong) return hit("Right!", esc(M.ok) + (M.result ? M.result() : ""));
+    var hint = "";
+    M.slots.forEach(function (sl) { if (!hint && M.hints && M.hints[pl[sl.id]]) hint = M.hints[pl[sl.id]]; });
+    if (!hint && M.swap) hint = M.swap(pl);
+    miss("<strong>Not yet.</strong> " + wrong + (wrong === 1 ? " card is" : " cards are") + " in the wrong place. " + esc(hint || M.generic));
+  }
+
+  function checkTyped() {
+    if (run.answered) return;
+    var M = mStep(), ty = run.typed || {};
+    var empty = M.slots.filter(function (sl) { return !String(ty[sl.id] || "").trim(); }).length;
+    if (empty) { run.verdict = { good: false, html: "<strong>Fill every box first.</strong> " + empty + (empty === 1 ? " exponent is" : " exponents are") + " still empty." }; render(); return; }
+    var vals = M.slots.map(function (sl) { return Number(String(ty[sl.id]).trim()); });
+    var wrong = M.slots.filter(function (sl, i) { return vals[i] !== sl.ans; }).length;
+    if (!wrong) return hit("Right!", esc(M.ok) + (M.result ? M.result() : ""));
+    var hint = "";
+    vals.forEach(function (v) { if (!hint) hint = v > 6 ? M.hints.big : (M.hints["x" + v] || ""); });
+    miss("<strong>Not yet.</strong> " + wrong + (wrong === 1 ? " exponent is" : " exponents are") + " off. " + esc(hint || M.generic));
+  }
+
+  function useGlass() {
+    if (save.inv.glass <= 0 || run.answered || run.crossed !== null) return;
+    var options = [];
+    if (cfg().match && mStep().typing) {   // the glass fills one exponent and locks it
+      var MT = mStep(), openT = MT.slots.filter(function (sl) { return Number(String((run.typed || {})[sl.id] || "").trim()) !== sl.ans || !String((run.typed || {})[sl.id] || "").trim(); });
+      if (!openT.length) return;
+      var tg = pick(openT);
+      run.typed[tg.id] = String(tg.ans); run.locked[tg.id] = true; run.crossed = "glass";
+      save.inv.glass -= 1; persist(); render(); return;
+    }
+    if (cfg().match) {   // the glass places one right card and locks it
+      var M = mStep(), want = M.slots.map(function (sl) { return sl.ans; });
+      var open = M.slots.filter(function (sl) { return M.anyOrder ? want.indexOf(run.place[sl.id]) < 0 : run.place[sl.id] !== sl.ans; });
+      if (!open.length) return;
+      var target = pick(open);
+      var ans = M.anyOrder ? want.filter(function (a) { return Object.keys(run.place).every(function (k) { return run.place[k] !== a; }); })[0] || target.ans : target.ans;
+      Object.keys(run.place).forEach(function (k) { if (run.place[k] === ans) delete run.place[k]; });
+      run.place[target.id] = ans; run.locked[target.id] = true; run.crossed = "glass";
+      save.inv.glass -= 1; persist(); render(); return;
+    }
+    if (cfg().quiz) {
+      if (run.step === 0) return;
+      options = cfg().quiz[run.step - 1].cards.map(function (c, i) { return c.ok ? -1 : i; }).filter(function (i) { return i >= 0 && run.wrong.indexOf(i) < 0; });
+    } else if (run.step === 0) {
+      if (cfg().stmt.multi) return;
+      var other = cfg().stmt.answer === "balance" ? "income" : "balance";
+      if (run.wrong.indexOf(other) < 0) options = [other];
+    } else if (run.step <= 3) {
+      var Ln = lineIn(cfg().sheet, run.items[run.step - 1]);
+      options = cfg().cats.map(function (c) { return c.k; }).filter(function (k) { return k !== Ln[cfg().key || "cls"] && run.wrong.indexOf(k) < 0; });
+    } else if (cfg().build) {
+      options = cfg().build[run.bi].cards.map(function (c, i) { return c.ok ? -1 : i; }).filter(function (i) { return i >= 0 && run.wrong.indexOf(i) < 0; });
+    }
+    if (!options.length) return;
+    save.inv.glass -= 1; persist();
+    run.crossed = pick(options);
+    render();
+  }
+  function glassUsable() {
+    if (cfg().match) return save.inv.glass > 0 && !run.answered && run.crossed === null;
+    if (cfg().quiz) return save.inv.glass > 0 && !run.answered && run.crossed === null && run.step >= 1;
+    if (run.step === 0 && cfg().stmt.multi) return false;
+    return save.inv.glass > 0 && !run.answered && run.crossed === null && (run.step <= 3 || (run.step === 4 && !!cfg().build));
+  }
+
+  // Level 1, step 5: pick the lines, two passes
+  function toggleRow(k) {
+    if (run.level !== 1 || run.step !== 4 || run.answered || run.tagged[k]) return;
+    run.sel[k] = !run.sel[k];
+    var row = document.querySelector('[data-row="' + k + '"]');
+    if (row) { row.classList.toggle("on", !!run.sel[k]); row.setAttribute("aria-pressed", run.sel[k] ? "true" : "false"); }
+  }
+  function checkSelection() {
+    if (run.level !== 1 || run.step !== 4 || run.answered) return;
+    var missing = 0, extra = 0;
+    BS.forEach(function (L) {
+      if (!L.cls || run.tagged[L.k] || L.optional) return;
+      var on = !!run.sel[L.k], need = L.cls === run.pass;
+      if (need && !on) missing += 1;
+      if (!need && on) extra += 1;
+    });
+    if (missing || extra) {
+      var parts = [];
+      if (missing) parts.push(missing + (missing === 1 ? " line is missing" : " lines are missing"));
+      if (extra) parts.push(extra + (extra === 1 ? " line doesn't belong" : " lines don't belong"));
+      return miss("<strong>Not yet.</strong> " + esc(parts.join(" and ")) + ".");
+    }
+    BS.forEach(function (L) { if (L.cls === run.pass) run.tagged[L.k] = run.pass; });
+    run.sel = {};
+    if (run.pass === "nonop") hit("Found it!", "Cash is Clarkson’s only non-operating asset.");
+    else hit("All of it!", "Every note payable and both parts of the term loan: all interest-bearing, nothing else.");
+  }
+
+  function next() {
+    if (!run || !run.answered) return;
+    if (run.step === 4) {
+      if (run.level === 1 && run.pass === "nonop") { run.pass = "debt"; resetStepState(); render(); window.scrollTo(0, 0); return; }
+      if (cfg().build && run.bi < cfg().build.length - 1) { run.bi += 1; run.order = shuffle([0, 1, 2]); resetStepState(); render(); window.scrollTo(0, 0); return; }
+      return win();
+    }
+    run.step += 1; resetStepState();
+    if (run.step === 4 && cfg().build) { run.bi = 0; run.order = shuffle([0, 1, 2]); }
+    if (cfg().quiz) run.order = shuffle([0, 1, 2]);
+    if (cfg().match) { run.place = {}; run.selCard = null; run.locked = {}; run.typed = {}; run.cardOrder = shuffle(mStep().cards.map(function (c) { return c.id; })); }
+    render(); window.scrollTo(0, 0);
+  }
+
+  function win() {
+    var first = !save.done[run.level];
+    save.done[run.level] = true; save.clears += 1; save.pop = first ? run.level : 0;
+    award(20); persist();
+    view = run.level === 5 ? "complete" : "won"; render();
+  }
+  function die() { save.deaths += 1; persist(); view = "dead"; render(); }
+
+  // Cheat code from the professor: refills the hearts and returns to the same question.
+  var CHEAT_HASH = 2835468747;
+  function codeHash(t) { var x = 5381; for (var i = 0; i < t.length; i++) x = (x * 33 + t.charCodeAt(i)) >>> 0; return x; }
+  function useCheat() {
+    var inp = document.getElementById("cheat"), msg = document.getElementById("cheat-msg");
+    if (!inp || !run || view !== "dead") return;
+    var t = inp.value.replace(/\s+/g, "").toUpperCase();
+    if (codeHash(t) !== CHEAT_HASH) { if (msg) msg.textContent = "That’s not the code. Ask your professor."; inp.select(); return; }
+    save.cheats = (save.cheats || 0) + 1; persist();
+    run.hp = run.maxHp; run.mood = "happy"; run.cheated = true;
+    run.verdict = { good: true, html: "<strong>Cheat code accepted.</strong> Hearts refilled. Pick up where you left off." };
+    view = "level"; render();
+  }
+
+  function gainHtml(n) { return ' <span class="gain">' + coin() + "+" + n + "</span>"; }
+  function focusNext() { var b = document.getElementById("next"); if (b) b.focus(); }
+
+  // ======================= award token =======================
+  function sha256Hex(str) {   // SHA-256 of the UTF-8 bytes of str, as hex (same as Python's hashlib.sha256)
+    var s = unescape(encodeURIComponent(str)), i, j;
+    function rot(x, n) { return (x >>> n) | (x << (32 - n)); }
+    var K = [], H = [], n = 0, c = 2;
+    while (n < 64) {           // first 64 primes: fractional parts of their cube roots (K) and square roots (H)
+      var prime = true;
+      for (j = 2; j * j <= c; j++) if (c % j === 0) { prime = false; break; }
+      if (prime) { if (n < 8) H[n] = (Math.pow(c, 1 / 2) * 4294967296) | 0; K[n] = (Math.pow(c, 1 / 3) * 4294967296) | 0; n++; }
+      c++;
+    }
+    var bytes = [];
+    for (i = 0; i < s.length; i++) bytes.push(s.charCodeAt(i));
+    var bitLen = bytes.length * 8;
+    bytes.push(0x80);
+    while (bytes.length % 64 !== 56) bytes.push(0);
+    for (i = 7; i >= 0; i--) bytes.push(i >= 4 ? 0 : (bitLen >>> (i * 8)) & 255);
+    for (var off = 0; off < bytes.length; off += 64) {
+      var W = [];
+      for (i = 0; i < 16; i++) W[i] = (bytes[off + 4 * i] << 24) | (bytes[off + 4 * i + 1] << 16) | (bytes[off + 4 * i + 2] << 8) | bytes[off + 4 * i + 3];
+      for (i = 16; i < 64; i++) {
+        var s0 = rot(W[i - 15], 7) ^ rot(W[i - 15], 18) ^ (W[i - 15] >>> 3);
+        var s1 = rot(W[i - 2], 17) ^ rot(W[i - 2], 19) ^ (W[i - 2] >>> 10);
+        W[i] = (W[i - 16] + s0 + W[i - 7] + s1) | 0;
+      }
+      var a = H[0], b = H[1], cc = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+      for (i = 0; i < 64; i++) {
+        var t1 = (h + (rot(e, 6) ^ rot(e, 11) ^ rot(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + W[i]) | 0;
+        var t2 = ((rot(a, 2) ^ rot(a, 13) ^ rot(a, 22)) + ((a & b) ^ (a & cc) ^ (b & cc))) | 0;
+        h = g; g = f; f = e; e = (d + t1) | 0; d = cc; cc = b; b = a; a = (t1 + t2) | 0;
+      }
+      H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + cc) | 0; H[3] = (H[3] + d) | 0;
+      H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+    }
+    var hex = "";
+    for (i = 0; i < 8; i++) hex += ("00000000" + (H[i] >>> 0).toString(16)).slice(-8);
+    return hex;
+  }
+  function normEmail(s) { return String(s || "").trim().toLowerCase(); }
+  function validEmail(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
+  function awardToken(email) {
+    var v = parseInt(sha256Hex(TOKEN_GAME + "|" + normEmail(email) + "|" + TOKEN_SECRET).slice(0, 8), 16) >>> 7;   // top 25 bits
+    var A = "0123456789ABCDEFGHJKMNPQRSTVWXYZ", out = "";
+    for (var i = 4; i >= 0; i--) out += A.charAt((v >>> (5 * i)) & 31);
+    return TOKEN_GAME + "-" + out;
+  }
+  function awardCard() {
+    if (!save.done[5] || !save.email) return "";
+    return '<div class="award"><p class="lbl">Your award token</p>' +
+      '<p class="tok" id="award-token">' + awardToken(save.email) + "</p>" +
+      '<p class="for">for ' + esc(save.email) + "</p>" +
+      '<p class="paste">Paste this line into Canvas, exactly as shown:</p>' +
+      '<code class="line" id="award-line">' + esc(save.email) + " " + awardToken(save.email) + "</code>" +
+      '<button class="btn small gold" data-act="copy-token">Copy line</button>' +
+      '<p class="copy-msg" id="copy-msg" role="status" aria-live="polite"></p>' +
+      '<p class="how">Submit it as your text entry in the Canvas assignment <strong>“' + CANVAS_ITEM + "”</strong> by " + CANVAS_DEADLINE + ".</p></div>";
+  }
+  function copyToken() {
+    var el = document.getElementById("award-line"), msg = document.getElementById("copy-msg");
+    function done(ok) { if (msg) msg.textContent = ok ? "Copied! Now paste it into Canvas." : "Select the line above and copy it (Ctrl+C, or Cmd+C on a Mac)."; }
+    function bySelection() {
+      try { var r = document.createRange(); r.selectNodeContents(el); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); done(document.execCommand("copy")); }
+      catch (e) { done(false); }
+    }
+    if (!el) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(el.textContent).then(function () { done(true); }, bySelection);
+    else bySelection();
+  }
+
+  // email before the first level: typed, then confirmed (the token depends on it)
+  var emailDraft = "", emailPending = null;
+  function submitEmail() {
+    var inp = document.getElementById("vv-email"), msg = document.getElementById("email-msg");
+    var v = normEmail(inp ? inp.value : "");
+    if (!validEmail(v)) { if (msg) msg.textContent = "Please type your full email address."; if (inp) inp.focus(); return; }
+    emailPending = v; render();
+  }
+  function confirmEmail() { save.email = emailPending; emailPending = null; emailDraft = ""; persist(); goHub(); }
+  function editEmail() { emailDraft = emailPending || ""; emailPending = null; render(); var inp = document.getElementById("vv-email"); if (inp) inp.focus(); }
+  function emailBox() {
+    if (emailPending) {
+      var gsb = /@gsb\.columbia\.edu$/.test(emailPending);
+      return '<div class="signin"><p class="who-line">You will play as <strong>' + esc(emailPending) + "</strong>.</p>" +
+        (gsb ? "" : '<p class="warn">This is not a @gsb.columbia.edu address. Please use your GSB email.</p>') +
+        '<p class="signin-note">Your award token at the end works only with this email. To change it later, you would have to start a new game.</p>' +
+        '<div class="title-actions"><button class="btn primary" data-act="email-ok">' + (hasProgress() ? "Yes, continue" : "Yes, start") + '</button><button class="btn" data-act="email-edit">Change it</button></div></div>';
+    }
+    return '<form class="signin" id="email-form" autocomplete="on"><label for="vv-email">Your GSB email</label>' +
+      '<div class="signin-row"><input id="vv-email" name="email" type="email" inputmode="email" autocomplete="email" spellcheck="false" autocapitalize="off" placeholder="you@gsb.columbia.edu" value="' + esc(emailDraft) + '">' +
+      '<button class="btn primary" type="submit">' + (hasProgress() ? "Continue" : "Start") + "</button></div>" +
+      '<p class="signin-note">You need it for your award token at the end. It stays on this device.</p>' +
+      '<p class="signin-msg" id="email-msg" role="status" aria-live="polite"></p></form>';
+  }
+
+  function hasProgress() {
+    return save.clears > 0 || save.deaths > 0 || save.coins !== START_COINS ||
+      Object.keys(save.inv).some(function (k) { return save.inv[k] > 0; });
+  }
+  function newGame() { save = freshSave(); persist(); run = null; }
+
+  // ======================= views =======================
+  function render() {
+    var app = document.getElementById("app");
+    var html = "";
+    if (view === "title") html = vTitle();
+    else if (view === "hub") html = vHub();
+    else if (view === "shop") html = vShop();
+    else if (view === "level") html = vLevel();
+    else if (view === "won") html = vWon();
+    else if (view === "dead") html = vDead();
+    else if (view === "complete") html = vComplete();
+    app.innerHTML = html;
+    if (run && run.ouch) { run.ouch = false; var h = document.querySelector(".hearts"); if (h) h.classList.add("ouch"); }
+    syncMusic();
+    if (view !== "level") window.scrollTo(0, 0);
+  }
+
+  function pills(withHearts) {
+    var h = "";
+    if (withHearts) {
+      var hs = ""; for (var i = 0; i < run.maxHp; i++) hs += heart(i < run.hp);
+      h += '<span class="pill hearts" role="img" aria-label="' + run.hp + " of " + run.maxHp + ' hearts">' + hs + "</span>";
+      h += '<button class="pill toolbtn" data-act="glass" title="Use a magnifying glass"' + (glassUsable() ? "" : " disabled") + ">" + toolIcon("glass") + save.inv.glass + "</button>";
+      h += '<span class="pill" title="Hard hats">' + toolIcon("hat") + save.inv.hat + "</span>";
+    }
+    h += '<span class="pill" aria-label="' + save.coins + ' coins">' + coin() + fmt(save.coins) + "</span>";
+    h += musicBtn();
+    return '<div class="pills">' + h + "</div>";
+  }
+
+  function brand() { return '<div class="brand">' + lion("happy") + "Valuation Valley</div>"; }
+
+  function vTitle() {
+    return '<section class="title-screen">' +
+      '<div class="title-top">' + musicBtn() + "</div>" +
+      '<div class="title-hero">' + banner() + lion("happy", "lion-big") + "</div>" +
+      '<div class="title-text">' +
+        '<h1 class="game-name">Valuation Valley</h1>' +
+        '<p class="tagline">Help Mr. Clarkson find out what his lumber company is worth, one stop at a time.</p>' +
+        '<ul class="rules">' +
+          "<li>" + heart(true).replace("<svg", '<svg width="26" height="26"') + "<span>Each level has five hearts. A wrong answer costs one.</span></li>" +
+          "<li>" + coin().replace("<svg", '<svg width="26" height="26"') + "<span>Right answers earn coins. Spend them on tools before a level.</span></li>" +
+          "<li>" + starIcon().replace("<svg", '<svg width="26" height="26"') + "<span>Finish a level and Mr. Clarkson’s numbers fill in.</span></li>" +
+          "<li>" + trophy().replace("<svg", '<svg width="26" height="26"') + "<span>Finish all five stops to earn your award token for Canvas.</span></li>" +
+        "</ul>" +
+        (!save.email
+          ? emailBox() + (hasProgress() && !emailPending ? '<button class="btn small" data-act="new-game">New game</button>' : "")
+          : '<p class="who-line">Playing as <strong>' + esc(save.email) + "</strong></p>" +
+            (hasProgress()
+              ? '<div class="title-actions"><button class="btn primary" data-act="hub">Continue</button><button class="btn" data-act="new-game">New game</button></div>'
+              : '<div class="title-actions"><button class="btn primary" data-act="hub">Start</button><button class="btn" data-act="new-game">Not you? Change email</button></div>')) +
+        '<p class="credit">' + CREDIT + "</p>" +
+      "</div></section>";
+  }
+
+  function clarkson() {
+    if (save.done[5]) return "Thank you again! The business is worth about " + fmt(Math.round(evVal())) + ", and " + fmt(Math.round(eqVal())) + " to me after the bank. Play any stop again to practice.";
+    if (save.done[4]) return "The River is done: everything after 2000 is worth " + fmt(Math.round(rv2000(G_LONG))) + " at the end of 2000, or " + fmt(Math.round(pvRv(G_LONG))) + " today. Next, the Counting House puts it all together; that path opens soon.";
+    if (save.done[3]) return "So in 1996 I invest more than the yard earns: free cash flow is " + signed(Math.round(inv3().fcf)) + ". By 2000, growth slows and the yard throws off " + fmt(Math.round(FCF_LATER[2000])) + " a year. But my yard doesn’t close in 2000. Next stop, the River: what is everything after 2000 worth?";
+    if (save.done[2]) return "The Mill is done: in 1996 the yard earns about " + fmt(Math.round(pro().nop)) + " after taxes, before anything goes to the bank. Next stop, the Lumber Yard. Profit isn’t cash: how much must I invest in the yard and in working capital?";
+    if (save.done[1]) return "The Vault is done! Cash is what I own that the business doesn't need, and the notes and loans are what I owe. Each goes into the valuation exactly once. Next stop, the Mill: what does the yard earn from selling lumber, before anything goes to the bank?";
+    return "Welcome to Valuation Valley! I'm Keith Clarkson. I've had offers for my lumber company, and I need to know what it's worth at the end of 1995. First stop, the Vault: what do I own that the business doesn't need, and what do I owe?";
+  }
+
+  function mvbs() {
+    var f = !!save.done[1], f5 = !!save.done[5], pop = save.pop === 1 ? " pop" : "", pop5 = save.pop === 5 ? " pop" : "";
+    var nonop = BS.filter(function (L) { return L.cls === "nonop"; }).reduce(function (s, L) { return s + L.v; }, 0);
+    var debt = BS.filter(function (L) { return L.cls === "debt"; }).reduce(function (s, L) { return s + L.v; }, 0);
+    function blk(c, label, sub, val, known) {
+      return '<div class="blk ' + c + (known ? pop : " unknown") + '"><span class="bl">' + label + "</span>" + (sub ? '<span class="bs">' + sub + "</span>" : "") +
+        '<span class="bv">' + (known ? fmt(val) : "?") + "</span></div>";
+    }
+    return '<div class="panel"><div class="panel-title">Mr. Clarkson’s balance sheet<small>market value, 12/31/1995, $ thousands</small></div>' +
+      '<div class="mvbs-head"><span>Assets</span><span>Claims</span></div>' +
+      '<div class="mvbs-grid"><div class="mvbs-col assets">' +
+        blk5("ev", "Enterprise value", "PV of future free cash flows", evVal()) + blk("nonop", "Non-operating assets", "", nonop, f) + "</div>" +
+      '<div class="mvbs-col claims">' + blk5("eq", "Equity", "EV + non-op. assets − debt", eqVal()) + blk("debt", "Debt", "", debt, f) + "</div></div></div>";
+    function blk5(c, label, sub, val) {
+      return '<div class="blk ' + c + (f5 ? pop5 : " unknown") + '"><span class="bl">' + label + '</span><span class="bs">' + sub + '</span><span class="bv">' + (f5 ? fmt(Math.round(val)) : "?") + "</span></div>";
+    }
+  }
+
+  function ladder() {
+    var f2 = !!save.done[2], f3 = !!save.done[3], q = inv3();
+    var rows = [
+      { n: "NOP", note: "the Mill", v: f2 ? Math.round(pro().nop) : null, pop: save.pop === 2 },
+      { n: "− ΔNFA", note: "the Lumber Yard", v: f3 ? Math.round(q.dnfa) : null, pop: save.pop === 3 },
+      { n: "− ΔNOWC", note: "the Lumber Yard", v: f3 ? Math.round(q.dnowc) : null, pop: save.pop === 3 },
+      { n: "= FCF 1996", note: "", v: f3 ? Math.round(q.fcf) : null, cls: "fcf", pop: save.pop === 3 }
+    ];
+    return '<div class="panel"><div class="panel-title">Mr. Clarkson’s 1996 free cash flow<small>$ thousands</small></div><table class="ladder"><tbody>' +
+      rows.map(function (r) {
+        var val = r.v === null ? '<span class="unk">?</span>' : '<span class="val known' + (r.pop ? " pop" : "") + '">' + signed(r.v) + "</span>";
+        return '<tr class="' + (r.cls || "") + '"><td>' + r.n + (r.note ? ' <span class="from">' + r.note + "</span>" : "") + "</td><td>" + val + "</td></tr>";
+      }).join("") + "</tbody></table></div>";
+  }
+
+  function fcfTable() {
+    var q = inv3(), p = pro();
+    var cols = [{ y: 1996, nop: p.nop, dnfa: q.dnfa, dnowc: q.dnowc, fcf: q.fcf }];
+    [1997, 1998, 1999, 2000].forEach(function (y) { var t = TABLE5[y]; cols.push({ y: y, nop: t[0], dnfa: t[1], dnowc: t[2], fcf: FCF_LATER[y] }); });
+    function row(label, k, cls) {
+      return '<tr class="' + (cls || "") + '"><td>' + label + "</td>" + cols.map(function (c) { return '<td class="' + (c.y === 1996 ? "y96" : "") + '">' + signed(Math.round(c[k])) + "</td>"; }).join("") + "</tr>";
+    }
+    var mu = save.done[5] ? '<p class="rvline' + (save.pop === 5 ? " pop" : "") + '">Forward multiples: <strong>' + mult(SALES96) + "×</strong> sales · <strong>" + mult(pro().ebit) + "×</strong> EBIT</p>" : "";
+    var rv = save.done[4] ? '<p class="rvline' + (save.pop === 4 ? " pop" : "") + '">Residual value at the end of 2000: <strong>' + fmt(Math.round(rv2000(G_LONG))) + "</strong> · worth <strong>" + fmt(Math.round(pvRv(G_LONG))) + "</strong> today</p>" : "";
+    return '<div class="panel"><div class="panel-title">Mr. Clarkson’s free cash flow<small>1996–2000, $ thousands</small></div>' +
+      '<div class="ex-scroll"><table class="fcf5' + (save.pop === 3 ? " pop" : "") + '"><thead><tr><th></th>' + cols.map(function (c) { return '<th class="' + (c.y === 1996 ? "y96" : "") + '">' + c.y + "</th>"; }).join("") + "</tr></thead><tbody>" +
+      row("NOP", "nop") + row("− ΔNFA", "dnfa") + row("− ΔNOWC", "dnowc") + row("= FCF", "fcf", "fcf") +
+      '</tbody></table></div><p class="fcfnote">You built 1996. 1997–2000 use the same assumptions.</p>' + rv + mu + "</div>";
+  }
+
+  function vHub() {
+    var stops = LEVELS.map(function (L, i) {
+      var state = !L.built || !unlocked(L) ? "locked" : (save.done[L.id] ? "done" : "open");
+      var node = state === "locked" ? lockIcon() : (state === "done" ? starIcon() : stopIcon(L.icon));
+      var chip = state === "done" ? '<span class="chip done">Done</span>' :
+        (state === "locked" ? '<span class="chip locked">' + (L.built ? "Finish " + LEVELS[i - 1].name + " first" : "Opens later") + "</span>" : "");
+      var act = state === "locked" ? "<span></span>" :
+        '<button class="btn small ' + (state === "open" ? "primary" : "") + '" data-act="shop" data-level="' + L.id + '">' + (state === "open" ? "Go" : "Play again") + "</button>";
+      return '<li class="stop ' + state + '"><span class="node">' + node + '</span><div><div class="nm">' + L.name + '</div><div class="tp">' + L.topic + "</div>" + chip + "</div>" + act + "</li>";
+    }).join("");
+    var html = '<section class="hub">' +
+      '<div class="topbar">' + brand() + '<div class="top-right">' + (save.done[5] ? '<span class="pill trophy-pill">' + trophy() + "Valuation complete</span>" : "") + pills(false) + '<button class="btn small" data-act="reset-ask">New game</button></div></div>' +
+      '<div class="reset-zone" id="reset-zone" role="status" aria-live="polite"></div>' +
+      awardCard() +
+      banner() +
+      '<div class="hub-top">' + owner("owner") + '<div class="bubble"><p class="who">Keith Clarkson, owner of Clarkson Lumber</p><p class="say">' + clarkson() + "</p></div></div>" +
+      '<div class="hub-grid"><div class="ledger-col">' + mvbs() + (save.done[3] ? fcfTable() : ladder()) + "</div>" +
+        '<div class="panel"><div class="panel-title">The path</div><ol class="trail">' + stops + "</ol></div></div>" +
+      '<footer class="hub-foot"><span>Playing as ' + esc(save.email || "") + " · Levels finished: " + save.clears + " · Times out of hearts: " + save.deaths + '</span><span class="credit">' + CREDIT + "</span></footer>" +
+      "</section>";
+    save.pop = 0; persist();
+    return html;
+  }
+
+  function vShop() {
+    var L = LEVELS[run.level - 1];
+    var cards = Object.keys(TOOLS).map(function (k) {
+      var t = TOOLS[k];
+      return '<div class="tool"><span class="ic">' + toolIcon(k) + '</span><span class="tn">' + t.name + '</span><span class="td">' + t.desc + "</span>" +
+        '<div class="tb"><span class="owned">You have ' + (save.inv[k] || 0) + '</span><button class="btn small gold" data-act="buy" data-tool="' + k + '"' + (save.coins < t.price ? " disabled" : "") + '><span class="price">' + coin() + t.price + "</span></button></div></div>";
+    }).join("");
+    return '<section class="shop">' +
+      '<div class="topbar">' + brand() + pills(false) + "</div>" +
+      '<div class="shop-head">' + lion("happy", "lion-mid") + '<div><h2>The tool shop</h2><p class="sub">Next stop: ' + L.name + " (" + L.topic.toLowerCase() + "). Buy tools now; you can't shop during a level. Tools you don't use stay in your pack.</p></div></div>" +
+      '<div class="tools">' + cards + "</div>" +
+      '<p class="shop-msg" role="status" aria-live="polite">' + esc(shopMsg) + "</p>" +
+      '<div class="shop-actions"><button class="btn primary" data-act="start">Enter ' + L.name + '</button><button class="btn" data-act="hub">Back to the valley</button></div>' +
+      "</section>";
+  }
+
+  function exTable(rows, opts) {
+    opts = opts || {};
+    return '<div class="ex-scroll"><table class="ex"><tbody>' + rows.map(function (r) {
+      if (r.gap) return '<tr class="gap"><td colspan="2"></td></tr>';
+      var cls = r.row || "", attrs = "";
+      if (opts.hl && r.k === opts.hl) cls += " hl";
+      var tag = opts.tagged && opts.tagged[r.k] ? '<span class="tag ' + opts.tagged[r.k] + '">' + (opts.tagged[r.k] === "debt" ? "Debt" : "Non-op") + "</span>" : "";
+      if (opts.pick && r.cls) {
+        if (opts.tagged && opts.tagged[r.k]) { cls += " static-row"; }
+        else {
+          cls += " pickable" + (opts.sel[r.k] ? " on" : "");
+          attrs = ' data-act="row" data-row="' + r.k + '" role="button" tabindex="0" aria-pressed="' + (opts.sel[r.k] ? "true" : "false") + '"';
+        }
+      } else if (opts.pick) { cls += " static-row"; }
+      return '<tr class="' + cls + '"' + attrs + "><td>" + esc(r.n) + tag + "</td><td>" + fmt(r.v) + "</td></tr>";
+    }).join("") + "</tbody></table></div>";
+  }
+
+  function choiceCards(list, isWrong, isCrossed, isRight, act, big) {
+    return '<div class="choices">' + list.map(function (c, i) {
+      var cls = "choice", dis = run.answered;
+      if (isWrong(c, i)) { cls += " wrong"; dis = true; }
+      else if (isCrossed(c, i)) { cls += " crossed"; dis = true; }
+      if (run.answered) cls += isRight(c, i) ? " right" : (cls.indexOf("wrong") < 0 && cls.indexOf("crossed") < 0 ? " dim" : "");
+      return '<button class="' + cls + '" data-act="' + act + '" data-val="' + (c.k !== undefined ? c.k : i) + '"' + (dis ? " disabled" : "") + ">" +
+        '<span class="ck">' + (c.k !== undefined ? catIcon(c.k) : "<span></span>") + '<span class="key">' + (i + 1) + "</span></span>" +
+        '<span class="cn' + (big && /^[0-9.,%]+$/.test(c.t || "") ? " big" : "") + '">' + esc(c.n !== undefined ? c.n : c.t) + '</span><span class="cd">' + esc(c.d) + "</span></button>";
+    }).join("") + "</div>";
+  }
+
+  function vLevel() {
+    var L = LEVELS[run.level - 1], C = cfg();
+    var dots = "";
+    for (var s = 0; s < 5; s++) dots += '<span class="dot ' + (s < run.step ? "done" : (s === run.step ? "now" : "")) + '"></span>';
+    var head = '<div class="lvl-head"><div class="lvl-name">' + L.name + '<span class="dots" role="img" aria-label="Step ' + (run.step + 1) + ' of 5">' + dots + "</span></div>" + pills(true) + "</div>";
+    var v = run.verdict;
+    var verdict = '<div role="status" aria-live="polite">' + (v ? '<div class="verdict ' + (v.good ? "good" : "bad") + '">' + v.html + "</div>" : "") + "</div>";
+    var lastSub = (run.level === 1 && run.pass === "debt") || (!!C.build && run.bi === C.build.length - 1) || !!C.quiz || !!C.match;
+    var nextBtn = run.answered ? '<div class="actions"><button class="btn primary" id="next" data-act="next">' +
+      (run.step === 4 && lastSub ? C.finish : "Next") + "</button></div>" : "";
+    function askTop(prompt, sub) { return '<div class="ask-top">' + lion(run.mood, "lion-sm") + '<div><h2 class="prompt">' + prompt + '</h2><p class="sub">' + sub + "</p></div></div>"; }
+    if (C.river) return vRiver(head, verdict, nextBtn, askTop);
+    if (C.match) return vMatch(head, verdict, nextBtn, askTop);
+
+    // step 1: which statement
+    if (run.step === 0) {
+      var multi = !!C.stmt.multi;
+      var stmt = function (which, title, rows) {
+        var cls = "stmt", dis = run.answered, pressed = "";
+        if (multi) {
+          if (run.stmtSel[which]) cls += " on";
+          if (run.answered) cls += " right";
+          pressed = ' aria-pressed="' + (run.stmtSel[which] ? "true" : "false") + '"';
+        } else {
+          if (run.wrong.indexOf(which) >= 0) { cls += " wrong"; dis = true; }
+          if (run.crossed === which) { cls += " crossed"; dis = true; }
+          if (run.answered && which === C.stmt.answer) cls += " right";
+        }
+        return '<div class="' + cls + '" role="button" tabindex="' + (dis ? "-1" : "0") + '" data-act="stmt" data-which="' + which + '" aria-disabled="' + (dis ? "true" : "false") + '"' + pressed + "><h3>" + title + "</h3>" + exTable(rows) + "</div>";
+      };
+      var check0 = multi && !run.answered ? '<div class="actions"><button class="btn primary" data-act="stmtcheck">Check my picks</button></div>' : "";
+      return '<section class="level">' + head +
+        '<div class="lvl-grid wide"><div class="ask">' + askTop(C.stmt.prompt, multi ? "Click a table to pick it, click again to undo, then check. $ thousands." : "Click a table. $ thousands.") +
+          '<div class="statements">' + stmt("income", "Exhibit 1 · Income statement, 1995", IS) + stmt("balance", "Exhibit 2 · Balance sheet, Dec 31, 1995", BS) + "</div>" +
+          check0 + verdict + nextBtn + "</div></div></section>";
+    }
+
+    var sheetPanel = function (opts) { return '<aside class="panel sheet"><div class="panel-title">' + C.sheetTitle + "</div>" + exTable(C.sheet, opts) + "</aside>"; };
+
+    // steps 2-4: one line at a time
+    if (run.step <= 3) {
+      var key = run.items[run.step - 1], Ln = lineIn(C.sheet, key);
+      var cards = choiceCards(C.cats,
+        function (c) { return run.wrong.indexOf(c.k) >= 0; },
+        function (c) { return run.crossed === c.k; },
+        function (c) { return c.k === Ln[C.key || "cls"]; }, "cat", false);
+      return '<section class="level">' + head +
+        '<div class="lvl-grid"><div class="ask">' + askTop(C.itemAsk(Ln), C.itemSub) + cards + verdict + nextBtn + "</div>" +
+        sheetPanel({ hl: key }) + "</div></section>";
+    }
+
+    // step 5, Level 1: pick the lines in two passes
+    if (run.level === 1) {
+      var ask = run.pass === "nonop"
+        ? 'Click <span class="item">every non-operating asset</span> in the balance sheet, then check.'
+        : 'Now click <span class="item">every debt item</span>, then check.';
+      var checkBtn = run.answered ? "" : '<div class="actions"><button class="btn primary" data-act="check">Check my picks</button></div>';
+      return '<section class="level">' + head +
+        '<div class="lvl-grid"><div class="ask">' + askTop(ask, "Final step. Click a line to pick it; click again to undo. A wrong check costs a heart.") +
+          checkBtn + verdict + nextBtn + "</div>" +
+        sheetPanel({ pick: true, sel: run.sel, tagged: run.tagged }) + "</div></section>";
+    }
+
+    // step 5, Levels 2-3: picks that build a table
+    var b = C.build[run.bi];
+    var list = run.order.map(function (ci) { return b.cards[ci]; });
+    var cardsB = choiceCards(list,
+      function (c, i) { return run.wrong.indexOf(run.order[i]) >= 0; },
+      function (c, i) { return run.crossed === run.order[i]; },
+      function (c) { return !!c.ok; }, "build", true);
+    return '<section class="level">' + head +
+      '<div class="lvl-grid"><div class="ask">' + askTop(b.ask, C.buildSub) +
+        C.table() + cardsB + verdict + nextBtn + "</div>" +
+      C.panel() + "</div></section>";
+  }
+
+  function vRiver(head, verdict, nextBtn, askTop) {
+    var C = cfg(), river = '<div class="panel river-panel">' + riverSvg() + "</div>";
+    if (run.step === 0) {
+      return '<section class="level">' + head + '<div class="lvl-grid wide"><div class="ask">' +
+        askTop(C.intro, "Growth rates are shown between the bars. FCF in $ thousands.") + river + verdict + nextBtn + "</div></div></section>";
+    }
+    var qz = C.quiz[run.step - 1];
+    var list = run.order.map(function (ci) { return qz.cards[ci]; });
+    var cards = choiceCards(list,
+      function (c, i) { return run.wrong.indexOf(run.order[i]) >= 0; },
+      function (c, i) { return run.crossed === run.order[i]; },
+      function (c) { return !!c.ok; }, "quiz", true);
+    return '<section class="level">' + head + '<div class="lvl-grid wide"><div class="ask">' +
+      askTop(qz.ask, qz.sub) + river + cards + verdict + (run.step === 4 && run.answered ? tryG() : "") + nextBtn + "</div></div></section>";
+  }
+
+  function slotHtml(id) {
+    var cid = run.place[id], c = cid ? cardById(cid) : null, lock = !!run.locked[id];
+    var cls = "slot" + (c ? " filled" : "") + (lock ? " locked" : "") + (run.selCard && !lock ? " ready" : "") + (run.answered ? " done" : "");
+    return '<span class="' + cls + '" data-act="mslot" data-slot="' + id + '"' + (c && !lock && !run.answered ? ' data-card="' + cid + '" draggable="true"' : "") +
+      ' role="button" tabindex="0" aria-label="' + (c ? "Slot holding " + esc(c.t) : "Empty slot") + '">' + (c ? esc(c.t) : "?") + "</span>";
+  }
+  function fixed(t) { return '<span class="slot fixed">' + t + "</span>"; }
+  function texpHtml(y) {
+    var id = "t" + y, v = (run.typed || {})[id] || "", lock = !!run.locked[id], ro = lock || run.answered;
+    return '<input class="tslot' + (lock ? " locked" : "") + (run.answered ? " done" : "") + '" id="' + id + '" data-tslot="' + id + '" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="T for ' + y + '" value="' + esc(v) + '"' + (ro ? " readonly" : "") + ">";
+  }
+  function vMatch(head, verdict, nextBtn, askTop) {
+    var M = mStep(), st = run.step, F = riverFcf(), r = function (v) { return signed(Math.round(v)); }, eqn;
+    if (st <= 1) {
+      eqn = '<div class="eqn"><span class="lhs">PV =</span>' + YEARS5.map(function (y) {
+        var num = st === 0 ? slotHtml("n" + y) : fixed(r(F[y]));
+        var t = st === 1 ? texpHtml(y) : '<span class="slot ghost">?</span>';
+        return '<span class="frac"><span class="fnum">' + num + '</span><span class="fden">1.115<sup>' + t + '</sup></span><span class="fyr">' + y + "</span></span>";
+      }).join('<span class="op">+</span>') + (st === 1 && run.answered ? '<span class="op">=</span><span class="eq-result">' + r(pvFcf()) + "</span>" : "") + "</div>";
+    } else if (st === 2) {
+      eqn = '<div class="eqn"><span class="lhs">EV =</span>' + slotHtml("e1") + '<span class="op">+</span>' + slotHtml("e2") +
+        (run.answered ? '<span class="op">=</span><span class="eq-result">' + r(evVal()) + "</span>" : "") + "</div>";
+    } else if (st === 3) {
+      eqn = '<div class="eqn"><span class="lhs">Equity =</span>' + slotHtml("q1") + '<span class="op">+</span>' + slotHtml("q2") + '<span class="op">−</span>' + slotHtml("q3") +
+        (run.answered ? '<span class="op">=</span><span class="eq-result">' + r(eqVal()) + "</span>" : "") + "</div>";
+    } else {
+      var ev = r(evVal());
+      eqn = '<div class="lines"><div class="eqn"><span class="lhs">EV / Sales =</span>' + fixed(ev) + '<span class="op">/</span>' + slotHtml("m1") + (run.answered ? '<span class="op">=</span><span class="eq-result">' + mult(SALES96) + "×</span>" : "") + "</div>" +
+        '<div class="eqn"><span class="lhs">EV / EBIT =</span>' + fixed(ev) + '<span class="op">/</span>' + slotHtml("m2") + (run.answered ? '<span class="op">=</span><span class="eq-result">' + mult(pro().ebit) + "×</span>" : "") + "</div></div>";
+    }
+    var used = Object.keys(run.place).map(function (k) { return run.place[k]; });
+    var order = run.cardOrder || M.cards.map(function (c) { return c.id; });
+    var tray = run.answered || M.typing ? "" : '<div class="tray" aria-label="Cards">' + order.map(cardById).filter(function (c) { return c && used.indexOf(c.id) < 0; }).map(function (c) {
+      return '<button class="mcard' + (run.selCard === c.id ? " sel" : "") + '" data-act="mcard" data-card="' + c.id + '" draggable="true">' + esc(c.t) + "</button>";
+    }).join("") + "</div>";
+    var check = run.answered ? "" : '<div class="actions"><button class="btn primary" data-act="' + (M.typing ? "tcheck" : "mcheck") + '">Check</button></div>';
+    return '<section class="level">' + head + '<div class="lvl-grid"><div class="ask">' + askTop(M.ask, M.sub) +
+      '<div class="panel eq-panel">' + eqn + "</div>" + tray + check + verdict + nextBtn + "</div>" + refPanel(st) + "</div></section>";
+  }
+  function refPanel(st) {
+    var F = riverFcf(), r = function (v) { return signed(Math.round(v)); };
+    function tbl(title, small, rows) {
+      return '<aside class="panel sheet"><div class="panel-title">' + title + "<small>" + small + '</small></div><div class="ex-scroll"><table class="assume"><tbody>' +
+        rows.map(function (x) { return "<tr><td>" + x[0] + "</td><td>" + x[1] + "</td></tr>"; }).join("") + "</tbody></table></div></aside>";
+    }
+    if (st <= 1) return tbl("Free cash flow", "$ thousands", [1996, 1997, 1998, 1999, 2000, 2001].map(function (y) { return [String(y), r(F[y])]; }));
+    if (st === 2) return tbl("What you know", "$ thousands", [["PV of FCF 1996–2000, today", r(pvFcf())], ["Residual value, end of 2000", r(rv2000(G_LONG))], ["Residual value, today", r(pvRv(G_LONG))], ["FCF 2000", r(F[2000])]]);
+    if (st === 3) return tbl("What you know", "$ thousands", [["Enterprise value, today", r(evVal())], ["Cash", r(nonopVal())], ["Notes payable and loans", r(debtVal())], ["Total liabilities", "1,188"], ["Net worth (book)", "449"]]);
+    return '<aside class="panel sheet"><div class="panel-title">Sales and EBIT<small>$ thousands</small></div><div class="ex-scroll"><table class="assume"><thead><tr><th></th><th>1995</th><th>1996</th><th>2000</th></tr></thead><tbody>' +
+      "<tr><td>Sales</td><td>4,519</td><td>5,500</td><td>8,766</td></tr><tr><td>EBIT</td><td>155</td><td>" + fmt(Math.round(pro().ebit)) + "</td><td>526</td></tr></tbody></table></div></aside>";
+  }
+
+  function trophy(cls) {
+    return '<svg class="' + (cls || "") + '" viewBox="0 0 150 170" aria-hidden="true">' +
+      '<path d="M42 30H22c0 24 11 36 25 38M108 30h20c0 24-11 36-25 38" fill="none" stroke="var(--gold-dark)" stroke-width="7" stroke-linecap="round"/>' +
+      '<path d="M40 18h70v34c0 27-16 44-35 44S40 79 40 52z" fill="var(--gold)" stroke="var(--gold-dark)" stroke-width="3"/>' +
+      '<path d="M75 34l5.2 10.6 11.6 1.7-8.4 8.2 2 11.6L75 60.6l-10.4 5.5 2-11.6-8.4-8.2 11.6-1.7z" fill="#fff6d0"/>' +
+      '<rect x="66" y="95" width="18" height="20" fill="var(--gold-dark)"/>' +
+      '<rect x="46" y="114" width="58" height="13" rx="4" fill="var(--gold)" stroke="var(--gold-dark)" stroke-width="3"/>' +
+      '<rect x="20" y="127" width="110" height="30" rx="7" fill="var(--wood)"/>' +
+      '<text x="75" y="146" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="10.5" fill="#fff">VALUATION VALLEY</text>' +
+      '<g fill="var(--gold)"><circle cx="18" cy="14" r="3"/><circle cx="134" cy="10" r="2.5"/><circle cx="140" cy="88" r="3"/><circle cx="10" cy="92" r="2.5"/></g></svg>';
+  }
+  function vComplete() {
+    var ev = fmt(Math.round(evVal())), eq = fmt(Math.round(eqVal()));
+    return '<section class="complete">' +
+      '<div class="trophy-row">' + trophy("trophy") + owner("owner") +
+        '<div class="bubble"><p class="who">Keith Clarkson, owner of Clarkson Lumber</p><p class="say"><strong>Thank you!</strong> The business is worth about ' + ev + ", and " + eq + " to me after the bank. Now I can listen to those offers.</p></div></div>" +
+      "<h2>Valuation complete!</h2>" +
+      "<p>You valued Clarkson Lumber at December 31, 1995, one stop at a time.</p>" +
+      awardCard() +
+      mvbs() +
+      '<p class="mults">Forward multiples: <strong>' + mult(SALES96) + "×</strong> sales · <strong>" + mult(pro().ebit) + "×</strong> EBIT</p>" +
+      '<p class="statline">' + run.hp + " of " + run.maxHp + " hearts left · " + run.misses + " mistakes · +" + run.earned + " coins in the Counting House</p>" +
+      '<button class="btn primary" data-act="hub">Back to the valley</button></section>';
+  }
+
+  function riverSvg() {
+    var F = riverFcf(), st = run.step, ans = run.answered;
+    var showFirst = st > 0 || ans, showG = st > 2 || (st === 2 && ans), showRV = st > 3 || (st === 3 && ans), showDisc = st === 4 && ans;
+    var X = function (y) { return 40 + (y - 1995) * 68; };
+    var o = '<svg class="river" viewBox="0 0 670 330" role="img" aria-label="Clarkson free cash flow, 1996 to 2003">' +
+      '<defs><marker id="rv-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--gold-dark)"/></marker></defs>' +
+      '<rect class="band" x="8" y="180" width="654" height="24" rx="12"/>';
+    for (var w = 20; w < 650; w += 44) o += '<path class="wave" d="M' + w + ' 192q6-4 12 0t12 0"/>';
+    o += '<circle class="today" cx="40" cy="192" r="7"/><text class="yrtxt" x="40" y="172">today</text><text class="yrtxt" x="40" y="222">1995</text>';
+    for (var y = 1996; y <= 2003; y++) {
+      var v = F[y], h = Math.abs(v) * 0.33, x = X(y), pos = v >= 0;
+      var cls = "yrg" + (showFirst && y === 2001 ? " first" : "") + (run.wrong.indexOf(y) >= 0 && st === 0 ? " wrong" : "");
+      var bar = '<rect class="bar ' + (pos ? "pos" : "neg") + '" x="' + (x - 17) + '" y="' + (pos ? 180 - h : 204) + '" width="34" height="' + Math.max(h, 2).toFixed(1) + '" rx="4"/>' +
+        '<text class="val" x="' + x + '" y="' + (pos ? 180 - h - 6 : 204 + h + 15).toFixed(1) + '">' + signed(Math.round(v)) + "</text>" +
+        '<text class="yrtxt band-txt" x="' + x + '" y="197">' + y + "</text>";
+      if (st === 0 && !ans) {
+        o += '<g class="' + cls + ' yr" data-act="year" data-year="' + y + '" role="button" tabindex="0" aria-label="' + y + ", FCF " + Math.round(v) + '">' +
+          '<rect class="hit" x="' + (x - 32) + '" y="24" width="64" height="300" rx="10"/>' + bar + "</g>";
+      } else {
+        o += '<g class="' + cls + '">' + bar + "</g>";
+      }
+    }
+    o += '<text class="yrtxt band-txt" x="642" y="197">…</text>';
+    [[1999, 2000], [2000, 2001], [2001, 2002], [2002, 2003]].forEach(function (pr) {
+      var g = F[pr[1]] / F[pr[0]] - 1;
+      o += '<text class="gr" x="' + ((X(pr[0]) + X(pr[1])) / 2) + '" y="74">+' + (g > 0.5 ? Math.round(g * 100) : (g * 100).toFixed(2)) + "%</text>";
+    });
+    if (showG) o += '<path class="arrow" d="M' + X(2001) + ' 38H658" marker-end="url(#rv-arrow)"/><text class="mark" x="560" y="30">grows at 5% forever</text>';
+    if (showRV) o += '<rect class="tag" x="' + (X(2000) - 66) + '" y="214" width="132" height="26" rx="13"/><text class="mark" x="' + X(2000) + '" y="232">RV₂₀₀₀ = ' + fmt(Math.round(rv2000(G_LONG))) + "</text>";
+    if (showDisc) o += '<path class="arrow" d="M' + X(2000) + ' 52C' + (X(2000) - 30) + " 0 110 0 40 160" + '" marker-end="url(#rv-arrow)"/><text class="mark" x="210" y="20">÷ 1.115⁵ = ' + fmt(Math.round(pvRv(G_LONG))) + " today</text>";
+    o += "</svg>";
+    return o + (showFirst ? '<p class="river-legend">Gold bar: the first cash flow of the perpetuity (FCF 2001).</p>' : "");
+  }
+
+  function gText(g) {
+    var base = pvRv(G_LONG), pv = pvRv(g / 100), d = Math.round(pv - base);
+    return "RV₂₀₀₀ = 234 / (11.5% − " + g.toFixed(1) + "%) = <strong>" + fmt(Math.round(rv2000(g / 100))) + "</strong> → worth <strong>" + fmt(Math.round(pv)) + "</strong> today" +
+      (d === 0 ? "" : " (" + (d > 0 ? "+" : "−") + fmt(Math.abs(d)) + " vs. g = 5%)");
+  }
+  function tryG() {
+    var g = run.gtry || 5;
+    return '<div class="panel trygp"><div class="panel-title">Try g<small>not scored · FCF 2001 held at 234</small></div>' +
+      '<label class="sub" for="gtry">Long-run growth g: <strong id="gval">' + g.toFixed(1) + "%</strong></label>" +
+      '<input type="range" id="gtry" min="3" max="7" step="0.5" value="' + g + '">' +
+      '<p class="gout" id="gout">' + gText(g) + "</p></div>";
+  }
+
+  function invTable() {
+    var q = inv3(), done = run.bi + (run.answered ? 1 : 0), cur = run.answered ? "" : BUILD3[run.bi].row;
+    function cell(v, show) { return show ? signed(Math.round(v)) : '<span class="q">?</span>'; }
+    function row(k, label, v95, v96, show96, chg, showChg, cls) {
+      return '<tr class="' + (cls || "") + (cur === k ? " cur" : "") + '"><td>' + label + "</td><td>" + signed(v95) + "</td><td>" + cell(v96, show96) + "</td><td>" + (chg === null ? "" : cell(chg, showChg)) + "</td></tr>";
+    }
+    var b = function (k) { return lineIn(BS, k).v; };
+    return '<div class="panel"><div class="panel-title">Clarkson’s 1996 investment<small>$ thousands</small></div><div class="ex-scroll"><table class="build inv"><thead><tr><th></th><th>1995</th><th>1996</th><th>Change</th></tr></thead><tbody>' +
+      row("nfa", "Net fixed assets", b("ppe"), q.nfa96, true, q.dnfa, done >= 1) +
+      row("ar", "Receivables", b("ar"), q.ar96, true, null) +
+      row("inv", "Inventory", b("inv"), q.inv96, true, null) +
+      row("ap", "− Payables", -b("ap"), -q.ap96, done >= 2, null) +
+      row("acc", "− Accrued expenses", -b("acc"), -q.acc96, true, null) +
+      row("nowc", "= NOWC", q.nowc95, q.nowc96, done >= 2, q.dnowc, done >= 2, "sum") +
+      (done >= 3 ? '<tr class="sum nop"><td>FCF 1996 = NOP − ΔNFA − ΔNOWC</td><td></td><td></td><td>' + signed(Math.round(q.fcf)) + "</td></tr>" : "") +
+      "</tbody></table></div></div>";
+  }
+
+  function assume3Panel(hl) {
+    return '<aside class="panel sheet"><div class="panel-title">1996 assumptions<small>from the assignment</small></div>' +
+      '<div class="ex-scroll"><table class="assume"><tbody>' +
+      ASSUME3.map(function (a) { return '<tr class="' + (a.k === hl ? "hl" : "") + '"><td>' + a.n + "</td><td>" + a.v + "</td></tr>"; }).join("") +
+      "</tbody></table></div></aside>";
+  }
+
+  function buildTable() {
+    var p = pro(), done = run.bi + (run.answered ? 1 : 0), cur = run.answered ? "" : BUILD[run.bi].k;
+    function row(label, how, val, show, cls) {
+      return '<tr class="' + (cls || "") + '"><td>' + label + "</td><td>" + (show ? how : "") + "</td><td>" + (show ? fmt(Math.round(val)) : '<span class="q">?</span>') + "</td></tr>";
+    }
+    return '<div class="panel"><div class="panel-title">Clarkson, 1996 pro forma<small>$ thousands</small></div><table class="build"><tbody>' +
+      row("Net sales", "given", p.sales, true) +
+      row("− Cost of goods sold", "75.0% × 5,500", p.cogs, done >= 1, cur === "cogs" ? "cur" : "") +
+      row("= Gross profit", "", p.gp, done >= 1, "sum") +
+      row("− Operating expenses", "20.4% × 5,500", p.opex, done >= 2, cur === "opex" ? "cur" : "") +
+      row("= EBIT", "", p.ebit, done >= 2, "sum") +
+      row("− Tax on EBIT", "35% × EBIT", p.tax, done >= 3, cur === "tax" ? "cur" : "") +
+      row("= NOP", "", p.nop, done >= 3, "sum nop") +
+      "</tbody></table></div>";
+  }
+
+  function assumePanel(hl) {
+    return '<aside class="panel sheet"><div class="panel-title">Projection assumptions<small>from the assignment</small></div>' +
+      '<div class="ex-scroll"><table class="assume"><thead><tr><th></th><th>Avg 1993–95</th><th>1996</th><th>1997</th></tr></thead><tbody>' +
+      ASSUME.map(function (a) { return '<tr class="' + (a.k === hl ? "hl" : "") + '"><td>' + a.n + "</td><td>" + a.a + "</td><td>" + a.y96 + "</td><td>" + a.y97 + "</td></tr>"; }).join("") +
+      '</tbody></table></div><p class="sub">1996 sales: 5,500 (given). 1995 actual tax rate: 22 / 99 = 22.2%.</p></aside>';
+  }
+
+  function vWon() {
+    var L = LEVELS[run.level - 1];
+    return '<section class="endcard">' + lion("cheer", "lion-big") +
+      "<h2>" + L.name + " is done!</h2>" +
+      "<p>" + cfg().won + "</p>" +
+      '<p class="statline">' + run.hp + " of " + run.maxHp + " hearts left · " + run.misses + " mistakes · +" + run.earned + " coins (incl. 20 for finishing)</p>" +
+      '<button class="btn primary" data-act="hub">Back to the valley</button></section>';
+  }
+  function vDead() {
+    var L = LEVELS[run.level - 1];
+    return '<section class="endcard">' + lion("oops", "lion-big") +
+      "<h2>Out of hearts</h2>" +
+      "<p>No harm done. You keep your coins and your tools. Take a breath and try " + L.name + " again.</p>" +
+      '<p class="statline">Step ' + (run.step + 1) + " of 5 · " + run.misses + " mistakes · +" + run.earned + " coins</p>" +
+      '<form class="cheat" id="cheat-form" autocomplete="off"><label for="cheat">Ask your professor for the cheat code</label>' +
+        '<div class="cheat-row"><input id="cheat" name="cheat" maxlength="20" spellcheck="false" autocapitalize="characters"><button class="btn small gold" type="submit">Use code</button></div>' +
+        '<p class="cheat-msg" id="cheat-msg" role="status" aria-live="polite"></p></form>' +
+      '<button class="btn primary" data-act="hub">Back to the valley</button></section>';
+  }
+
+  // ======================= reset =======================
+  function askReset() {
+    var z = document.getElementById("reset-zone");
+    if (z) z.innerHTML = '<span>Start a new game? This erases coins, tools and Mr. Clarkson’s numbers.</span><button class="btn small primary" data-act="reset-yes">Yes, start over</button><button class="btn small" data-act="reset-no">Cancel</button>';
+  }
+
+  // ======================= events =======================
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-act]");
+    if (!b || b.disabled || b.getAttribute("aria-disabled") === "true") return;
+    var a = b.getAttribute("data-act");
+    if (a === "hub") goHub();
+    else if (a === "shop") openShop(Number(b.getAttribute("data-level")));
+    else if (a === "buy") buy(b.getAttribute("data-tool"));
+    else if (a === "start") startLevel(run.level);
+    else if (a === "stmt") answerStatement(b.getAttribute("data-which"));
+    else if (a === "cat") answerCat(b.getAttribute("data-val"));
+    else if (a === "build") answerBuild(Number(b.getAttribute("data-val")));
+    else if (a === "glass") useGlass();
+    else if (a === "row") toggleRow(b.getAttribute("data-row"));
+    else if (a === "check") checkSelection();
+    else if (a === "stmtcheck") checkStmt();
+    else if (a === "year") answerYear(Number(b.getAttribute("data-year")));
+    else if (a === "quiz") answerQuiz(Number(b.getAttribute("data-val")));
+    else if (a === "mcard") clickCard(b.getAttribute("data-card"));
+    else if (a === "mslot") clickSlot(b.getAttribute("data-slot"));
+    else if (a === "mcheck") checkMatch();
+    else if (a === "tcheck") checkTyped();
+    else if (a === "next") next();
+    else if (a === "reset-ask") askReset();
+    else if (a === "reset-yes") { newGame(); view = "title"; render(); }
+    else if (a === "reset-no") { var z = document.getElementById("reset-zone"); if (z) z.innerHTML = ""; }
+    else if (a === "new-game") { newGame(); emailDraft = ""; emailPending = null; view = "title"; render(); }
+    else if (a === "email-ok") confirmEmail();
+    else if (a === "email-edit") editEmail();
+    else if (a === "copy-token") copyToken();
+    else if (a === "music") toggleMusic();
+  });
+  document.addEventListener("submit", function (e) {
+    if (e.target && e.target.id === "cheat-form") { e.preventDefault(); useCheat(); }
+    if (e.target && e.target.id === "email-form") { e.preventDefault(); submitEmail(); }
+  });
+  document.addEventListener("keydown", function (e) {
+    var t = e.target;
+    if (t && t.getAttribute && t.getAttribute("data-tslot") && e.key === "Enter") { e.preventDefault(); checkTyped(); return; }
+    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+    if (t && t.getAttribute && t.getAttribute("data-act") === "row" && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); toggleRow(t.getAttribute("data-row")); return; }
+    if (t && t.getAttribute && t.getAttribute("data-act") === "stmt" && t.getAttribute("aria-disabled") !== "true" && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); answerStatement(t.getAttribute("data-which")); return; }
+    if (t && t.getAttribute && t.getAttribute("data-act") === "year" && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); answerYear(Number(t.getAttribute("data-year"))); return; }
+    if (t && t.getAttribute && t.getAttribute("data-act") === "mslot" && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); clickSlot(t.getAttribute("data-slot")); return; }
+    if (view !== "level" || !run || run.answered || !/^[1-3]$/.test(e.key)) return;
+    var n = Number(e.key) - 1;
+    if (cfg().match) return;
+    if (cfg().quiz) { if (run.step >= 1) answerQuiz(n); return; }
+    if (run.step >= 1 && run.step <= 3) answerCat(cfg().cats[n].k);
+    else if (run.step === 4 && cfg().build) answerBuild(n);
+  });
+
+  document.addEventListener("dragstart", function (e) {
+    var c = e.target && e.target.closest ? e.target.closest("[data-card]") : null;
+    if (!c || !run || run.answered) return;
+    e.dataTransfer.setData("text/plain", c.getAttribute("data-card")); e.dataTransfer.effectAllowed = "move";
+  });
+  document.addEventListener("dragover", function (e) {
+    var sl = e.target && e.target.closest ? e.target.closest('[data-act="mslot"]') : null;
+    if (sl) { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }
+  });
+  document.addEventListener("drop", function (e) {
+    var sl = e.target && e.target.closest ? e.target.closest('[data-act="mslot"]') : null;
+    if (!sl) return;
+    e.preventDefault();
+    var id = e.dataTransfer.getData("text/plain");
+    if (id) placeCard(id, sl.getAttribute("data-slot"));
+  });
+
+  document.addEventListener("input", function (e) {
+    var ts = e.target && e.target.getAttribute ? e.target.getAttribute("data-tslot") : null;
+    if (ts && run) {
+      run.typed[ts] = e.target.value.replace(/[^0-9]/g, "");
+      if (e.target.value !== run.typed[ts]) e.target.value = run.typed[ts];
+      if (/^[0-9]$/.test(run.typed[ts])) {   // one digit typed: hop to the next empty box
+        var boxes = Array.prototype.slice.call(document.querySelectorAll(".tslot:not([readonly])")), i = boxes.indexOf(e.target);
+        if (i >= 0 && i < boxes.length - 1) boxes[i + 1].focus();
+      }
+      return;
+    }
+    if (!e.target || e.target.id !== "gtry" || !run) return;
+    run.gtry = Number(e.target.value);
+    var v = document.getElementById("gval"), out = document.getElementById("gout");
+    if (v) v.textContent = run.gtry.toFixed(1) + "%";
+    if (out) out.innerHTML = gText(run.gtry);
+  });
+
+  // ======================= boot (keeps a game in progress across page updates) =======================
+  function start(data) {
+    if (data && data.view) { save = data.save || save; run = data.run || null; view = data.view; }
+    if ((view === "level" || view === "won" || view === "dead" || view === "shop" || view === "complete") && !run) view = "hub";
+    if (!save.email) view = "title";   // saves from before the award token have no email: ask for it, keep the progress
+    render();
+  }
+  if (window.claude && window.claude.hot && window.claude.hot.snapshot) {
+    window.claude.hot.snapshot(function () { return { save: save, run: run, view: view }; });
+  }
+  if (window.claude && window.claude.hot && window.claude.hot.ready) window.claude.hot.ready(start);
+  else start((window.claude && window.claude.hot && window.claude.hot.data) || {});
+})();
+</script>
