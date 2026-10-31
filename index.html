@@ -703,11 +703,10 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
       lastExtra: function () { var p = pro(); return " So 1996 NOP = " + fmt(Math.round(p.ebit)) + " × (1 − 35%) ≈ <strong>" + fmt(Math.round(p.nop)) + "</strong>. Interest never came in."; }
     },
     3: {
-      stmt: { answer: "both", multi: true,
-        prompt: 'For <span class="item">ΔNFA</span> and <span class="item">ΔNOWC</span>, which statements do you need? You can pick one or both.',
-        onlyBalance: "The balance sheet gives the 1995 levels. But the ratios run on sales, COGS and purchases, and those come from the income statement.",
-        onlyIncome: "The income statement gives sales, COGS and purchases. But a change needs a starting level, and the 1995 levels are on the balance sheet.",
-        ok: "Both: the balance sheet gives the 1995 levels, and the income statement gives what drives them: sales, COGS and purchases." },
+      stmt: { answer: "balance",
+        prompt: '<span class="item">ΔNFA</span> and <span class="item">ΔNOWC</span> are changes in the lines of which statement?',
+        wrong: "The income statement shows flows over the year, such as sales and COGS. ΔNFA and ΔNOWC are changes in levels, and the levels are on the balance sheet.",
+        ok: "ΔNFA and ΔNOWC are this year’s balance-sheet level minus last year’s. To project 1996, though, each line moves with something on the income statement: sales, COGS or purchases. That’s next." },
       sheet: BS, sheetTitle: "Exhibit 2 · Balance sheet<small>Dec 31, 1995, $ thousands</small>", key: "drv",
       cats: [
         { k: "sales", n: "Sales", d: "The ratio is applied to sales" },
@@ -992,7 +991,7 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
     render(); focusNext();
   }
 
-  // step 1: which statement (Level 3: pick one or both, then check)
+  // step 1: which statement. stmt.multi = pick one or both, then check (Level 3 used it until 31 Oct 2026; no level does now)
   function toggleStmt(which) {
     if (run.answered || run.step !== 0) return;
     run.stmtSel[which] = !run.stmtSel[which];
