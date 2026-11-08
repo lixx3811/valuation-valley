@@ -707,11 +707,11 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
       draw: function () { return ["ap", "inv"]; },   // 8 Nov 2026 (Xuelin, played together in class): payables, then inventory
       itemAsk: function (Ln) { return 'What drives 1996 <span class="item">' + esc(Ln.n.replace(", net", "").toLowerCase()) + "</span>?"; },
       itemSub: "It’s highlighted in the balance sheet. Pick the base its ratio is applied to: the projection assumptions below show every ratio.",
-      itemPanel: function (k) { return ratiosPanel(k); },
+      itemPanel: function () { return ratiosPanel(""); },   // no highlight (Xuelin, 8 Nov 2026): the highlight gave the answer away
       finish: "Finish the Lumber Yard",
       won: "You found what Clarkson must invest in 1996: 52 in the yard and 388 in working capital. His 1996 free cash flow is complete.",
       build: BUILD3, buildSub: "Final step: build Clarkson’s 1996 investment.",
-      table: function () { return invTable(); }, panel: function () { return assume3Panel(BUILD3[run.bi].hl); },
+      table: function () { return invTable(); }, panel: function () { return assume3Panel(""); },
       lastExtra: function () { var q = inv3(); return " So FCF 1996 = NOP " + fmt(Math.round(pro().nop)) + " − ΔNFA " + fmt(Math.round(q.dnfa)) + " − ΔNOWC " + fmt(Math.round(q.dnowc)) + " ≈ <strong>" + signed(Math.round(q.fcf)) + "</strong>."; }
     },
     4: {
