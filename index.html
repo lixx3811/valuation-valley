@@ -673,11 +673,7 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
         { k: "nonop", n: "Non-operating asset", d: "Owned, but not needed to run the business" },
         { k: "op", n: "Operating", d: "Part of running the lumber business" } ],
       why: WHY1,
-      draw: function () {
-        var a = pick(["npt", "nph"]), b = pick(["ap", "acc", "inv", "ppe"]);   // 8 Nov 2026: no term loan (either part), no receivables
-        var rest = ["cash", "npb", "ap", "acc", "inv", "ppe", "npt", "nph"].filter(function (k) { return k !== a && k !== b; });
-        return shuffle([a, b, pick(rest)]);
-      },
+      draw: function () { return ["npt"]; },   // 8 Nov 2026 (Xuelin, played together in class): one fixed line, no randomness
       itemAsk: function (Ln) { return '<span class="item">' + esc(Ln.n) + "</span>, $" + fmt(Ln.v) + " thousand. What is it?"; },
       itemSub: "It’s highlighted in the balance sheet.",
       finish: "Finish the Vault",
@@ -1185,6 +1181,7 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
       return win();
     }
     run.step += 1; resetStepState();
+    if (cfg().cats && run.step >= 1 && run.step <= 3 && run.step > run.items.length) run.step = 4;   // fewer than 3 line questions
     if (run.step === 4 && cfg().build) { run.bi = 0; run.order = shuffle([0, 1, 2]); }
     if (cfg().quiz) run.order = shuffle([0, 1, 2]);
     if (cfg().match) { run.place = {}; run.selCard = null; run.locked = {}; run.typed = {}; run.cardOrder = shuffle(mStep().cards.map(function (c) { return c.id; })); }
@@ -1498,11 +1495,18 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
     }).join("") + "</div>";
   }
 
+  // position for the progress dots: levels with line questions show only the steps they use
+  function stepPos() {
+    if (!cfg().cats) return { at: run.step, total: 5 };
+    var n = run.items.length;
+    return { at: run.step === 4 ? n + 1 : run.step, total: n + 2 };
+  }
+
   function vLevel() {
     var L = LEVELS[run.level - 1], C = cfg();
-    var dots = "";
-    for (var s = 0; s < 5; s++) dots += '<span class="dot ' + (s < run.step ? "done" : (s === run.step ? "now" : "")) + '"></span>';
-    var head = '<div class="lvl-head"><div class="lvl-name">' + L.name + '<span class="dots" role="img" aria-label="Step ' + (run.step + 1) + ' of 5">' + dots + "</span></div>" + pills(true) + "</div>";
+    var dots = "", sp = stepPos();
+    for (var s = 0; s < sp.total; s++) dots += '<span class="dot ' + (s < sp.at ? "done" : (s === sp.at ? "now" : "")) + '"></span>';
+    var head = '<div class="lvl-head"><div class="lvl-name">' + L.name + '<span class="dots" role="img" aria-label="Step ' + (sp.at + 1) + " of " + sp.total + '">' + dots + "</span></div>" + pills(true) + "</div>";
     var v = run.verdict;
     var verdict = '<div role="status" aria-live="polite">' + (v ? '<div class="verdict ' + (v.good ? "good" : "bad") + '">' + v.html + "</div>" : "") + "</div>";
     var lastSub = (run.level === 1 && run.pass === "debt") || (!!C.build && run.bi === C.build.length - 1) || !!C.quiz || !!C.match;
@@ -1794,7 +1798,7 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
     return '<section class="endcard">' + lion("oops", "lion-big") +
       "<h2>Out of hearts</h2>" +
       "<p>No harm done. You keep your coins and your tools. Take a breath and try " + L.name + " again.</p>" +
-      '<p class="statline">Step ' + (run.step + 1) + " of 5 · " + run.misses + " mistakes · +" + run.earned + " coins</p>" +
+      '<p class="statline">Step ' + (stepPos().at + 1) + " of " + stepPos().total + " · " + run.misses + " mistakes · +" + run.earned + " coins</p>" +
       '<form class="cheat" id="cheat-form" autocomplete="off"><label for="cheat">Ask your professor for the cheat code</label>' +
         '<div class="cheat-row"><input id="cheat" name="cheat" maxlength="20" spellcheck="false" autocapitalize="characters"><button class="btn small gold" type="submit">Use code</button></div>' +
         '<p class="cheat-msg" id="cheat-msg" role="status" aria-live="polite"></p></form>' +
