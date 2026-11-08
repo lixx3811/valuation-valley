@@ -613,21 +613,15 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
     { k: "acc", n: "Accrued exp. / sales", v: "1.46%" }
   ];
   var BUILD3 = [
-    { hl: "nfato", row: "nfa", ask: 'NFA at the end of 1996 is 440. ΔNFA = 440 − NFA at the end of 1995. <span class="item">What is NFA at the end of 1995?</span>', cards: [
-      { t: "388", d: "Property, net, on the 1995 balance sheet", ok: true,
-        why: "Start from what Clarkson actually owns at the end of 1995. ΔNFA = 440 − 388 = 52." },
-      { t: "362", d: "1995 sales / 12.5",
-        why: "The ratio projects 1996 onward. For 1995 we have the actual balance sheet: 388." },
-      { t: "0", d: "Everything in 1996 is new",
-        why: "Clarkson already owns 388 of fixed assets. Only the increase is new investment." } ] },
-    { hl: "ap", row: "ap", ask: 'Payables run on purchases. What are <span class="item">1996 purchases</span>?', cards: [
+    // 8 Nov 2026: the "NFA at the end of 1995 (388)" question was dropped (Xuelin); ΔNFA = 52 is shown in the table
+    { hl: "ap", row: "ap", order: [1, 0, 2], ask: 'Payables run on purchases. What are <span class="item">1996 purchases</span>?', cards: [
       { t: "4,209", d: "COGS + (ending − beginning inventory) = 4,125 + (671 − 587)", ok: true,
         why: "To sell 4,125 of lumber and still grow inventory by 84, Clarkson must buy 4,209. AP = 10 × 4,209 / 365 ≈ 115." },
       { t: "4,125", d: "COGS",
         why: "That is what Clarkson sells, not what it buys. Inventory grows in 1996, so purchases exceed COGS. Last year 7 teams made this mistake." },
       { t: "4,041", d: "COGS − (ending − beginning inventory)",
         why: "Sign flipped. When inventory grows, Clarkson buys more than it sells: add the change." } ] },
-    { hl: "", row: "nowc", ask: 'NOWC jumps from 742 to 1,130. <span class="item">Why so much?</span>', cards: [
+    { hl: "", row: "nowc", order: [1, 2, 0], ask: 'NOWC jumps from 742 to 1,130. <span class="item">Why so much?</span>', cards: [
       { t: "Mostly payables", d: "Paying within 10 days cuts AP from 376 to 115", ok: true,
         why: "Payables fall by about 260 because Clarkson now pays within 10 days to get the 2% discount. Receivables and inventory add only about 130. The discount costs working capital today." },
       { t: "Mostly sales growth", d: "Receivables and inventory grow with sales",
@@ -710,7 +704,7 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
         { k: "cogs", n: "COGS", d: "The ratio is applied to cost of goods sold" },
         { k: "purch", n: "Purchases", d: "The ratio is applied to lumber bought in the year" } ],
       why: WHY3,
-      draw: function () { return shuffle(["ap", "inv", pick(["acc", "ppe"])]); },   // 8 Nov 2026: no receivables
+      draw: function () { return ["ap", "inv"]; },   // 8 Nov 2026 (Xuelin, played together in class): payables, then inventory
       itemAsk: function (Ln) { return 'What drives 1996 <span class="item">' + esc(Ln.n.replace(", net", "").toLowerCase()) + "</span>?"; },
       itemSub: "It’s highlighted in the balance sheet. Pick the base its ratio is applied to: the projection assumptions below show every ratio.",
       itemPanel: function (k) { return ratiosPanel(k); },
@@ -1727,13 +1721,13 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
     }
     var b = function (k) { return lineIn(BS, k).v; };
     return '<div class="panel"><div class="panel-title">Clarkson’s 1996 investment<small>$ thousands</small></div><div class="ex-scroll"><table class="build inv"><thead><tr><th></th><th>1995</th><th>1996</th><th>Change</th></tr></thead><tbody>' +
-      row("nfa", "Net fixed assets", b("ppe"), q.nfa96, true, q.dnfa, done >= 1) +
+      row("nfa", "Net fixed assets", b("ppe"), q.nfa96, true, q.dnfa, true) +
       row("ar", "Receivables", b("ar"), q.ar96, true, null) +
       row("inv", "Inventory", b("inv"), q.inv96, true, null) +
-      row("ap", "− Payables", -b("ap"), -q.ap96, done >= 2, null) +
+      row("ap", "− Payables", -b("ap"), -q.ap96, done >= 1, null) +
       row("acc", "− Accrued expenses", -b("acc"), -q.acc96, true, null) +
-      row("nowc", "= NOWC", q.nowc95, q.nowc96, done >= 2, q.dnowc, done >= 2, "sum") +
-      (done >= 3 ? '<tr class="sum nop"><td>FCF 1996 = NOP − ΔNFA − ΔNOWC</td><td></td><td></td><td>' + signed(Math.round(q.fcf)) + "</td></tr>" : "") +
+      row("nowc", "= NOWC", q.nowc95, q.nowc96, done >= 1, q.dnowc, done >= 1, "sum") +
+      (done >= 2 ? '<tr class="sum nop"><td>FCF 1996 = NOP − ΔNFA − ΔNOWC</td><td></td><td></td><td>' + signed(Math.round(q.fcf)) + "</td></tr>" : "") +
       "</tbody></table></div></div>";
   }
 
