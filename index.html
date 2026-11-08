@@ -114,6 +114,7 @@ p { margin: 0; }
 .bubble .who { font-family: var(--f-display); font-weight: 700; color: var(--wood); font-size: 15px; }
 .bubble .say { font-size: 18px; }
 .hub-grid { margin-top: 24px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.stack { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
 .panel { background: var(--card); border-radius: 22px; padding: 18px; box-shadow: 0 3px 0 var(--line); min-width: 0; }
 .panel-title { font-family: var(--f-display); font-weight: 700; font-size: 20px; color: var(--navy); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
 .panel-title small { font-family: var(--f-body); font-weight: 600; font-size: 13px; color: var(--muted); }
@@ -612,7 +613,7 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
     { k: "acc", n: "Accrued exp. / sales", v: "1.46%" }
   ];
   var BUILD3 = [
-    { hl: "nfato", row: "nfa", ask: 'ΔNFA = 1996 NFA of 440 minus <span class="item">which 1995 NFA</span>?', cards: [
+    { hl: "nfato", row: "nfa", ask: 'NFA at the end of 1996 is 440. ΔNFA = 440 − NFA at the end of 1995. <span class="item">What is NFA at the end of 1995?</span>', cards: [
       { t: "388", d: "Property, net, on the 1995 balance sheet", ok: true,
         why: "Start from what Clarkson actually owns at the end of 1995. ΔNFA = 440 − 388 = 52." },
       { t: "362", d: "1995 sales / 12.5",
@@ -673,8 +674,8 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
         { k: "op", n: "Operating", d: "Part of running the lumber business" } ],
       why: WHY1,
       draw: function () {
-        var a = pick(["npt", "nph", "tlc"]), b = pick(["ap", "acc", "ar", "inv", "ppe"]);
-        var rest = ["cash", "npb", "tl", "ap", "acc", "ar", "inv", "ppe", "npt", "nph", "tlc"].filter(function (k) { return k !== a && k !== b; });
+        var a = pick(["npt", "nph"]), b = pick(["ap", "acc", "inv", "ppe"]);   // 8 Nov 2026: no term loan (either part), no receivables
+        var rest = ["cash", "npb", "ap", "acc", "inv", "ppe", "npt", "nph"].filter(function (k) { return k !== a && k !== b; });
         return shuffle([a, b, pick(rest)]);
       },
       itemAsk: function (Ln) { return '<span class="item">' + esc(Ln.n) + "</span>, $" + fmt(Ln.v) + " thousand. What is it?"; },
@@ -693,7 +694,7 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
         { k: "out", n: "Leave out", d: "Financing, or below operating profit" },
         { k: "recompute", n: "Recompute", d: "Replace it with our own number" } ],
       why: WHY2,
-      draw: function () { return shuffle(["int", "tax", pick(["sales", "cogs", "opex", "ni"])]); },
+      draw: function () { var o = shuffle(["sales", "cogs", "opex", "ni"]); return shuffle(["int", o[0], o[1]]); },   // 8 Nov 2026: no tax line
       itemAsk: function (Ln) { return 'Turning 1995 into NOP: what do you do with <span class="item">' + esc(Ln.n) + "</span> ($" + fmt(Ln.v) + " thousand)?"; },
       itemSub: "It’s highlighted in the income statement.",
       finish: "Finish the Mill",
@@ -713,9 +714,10 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
         { k: "cogs", n: "COGS", d: "The ratio is applied to cost of goods sold" },
         { k: "purch", n: "Purchases", d: "The ratio is applied to lumber bought in the year" } ],
       why: WHY3,
-      draw: function () { return shuffle(["ap", "inv", pick(["ar", "acc", "ppe"])]); },
+      draw: function () { return shuffle(["ap", "inv", pick(["acc", "ppe"])]); },   // 8 Nov 2026: no receivables
       itemAsk: function (Ln) { return 'What drives 1996 <span class="item">' + esc(Ln.n.replace(", net", "").toLowerCase()) + "</span>?"; },
-      itemSub: "It’s highlighted in the balance sheet. Pick the base its ratio is applied to.",
+      itemSub: "It’s highlighted in the balance sheet. Pick the base its ratio is applied to: the projection assumptions below show every ratio.",
+      itemPanel: function (k) { return ratiosPanel(k); },
       finish: "Finish the Lumber Yard",
       won: "You found what Clarkson must invest in 1996: 52 in the yard and 388 in working capital. His 1996 free cash flow is complete.",
       build: BUILD3, buildSub: "Final step: build Clarkson’s 1996 investment.",
@@ -1544,7 +1546,8 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
         function (c) { return c.k === Ln[C.key || "cls"]; }, "cat", false);
       return '<section class="level">' + head +
         '<div class="lvl-grid"><div class="ask">' + askTop(C.itemAsk(Ln), C.itemSub) + cards + verdict + nextBtn + "</div>" +
-        sheetPanel({ hl: key }) + "</div></section>";
+        (C.itemPanel ? '<div class="stack">' + sheetPanel({ hl: key }) + C.itemPanel(key) + "</div>" : sheetPanel({ hl: key })) +
+        "</div></section>";
     }
 
     // step 5, Level 1: pick the lines in two passes
@@ -1728,6 +1731,24 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
       row("nowc", "= NOWC", q.nowc95, q.nowc96, done >= 2, q.dnowc, done >= 2, "sum") +
       (done >= 3 ? '<tr class="sum nop"><td>FCF 1996 = NOP − ΔNFA − ΔNOWC</td><td></td><td></td><td>' + signed(Math.round(q.fcf)) + "</td></tr>" : "") +
       "</tbody></table></div></div>";
+  }
+
+  // Level 3, steps 2-4: the assignment's projection assumptions, all ratios, the current line highlighted
+  var RATIOS = [
+    { k: "", n: "Sales growth rate", a: "24.5%", y: "21.7%" },
+    { k: "", n: "CGS / Sales", a: "75.6%", y: "75.0%" },
+    { k: "", n: "Op. exp. / Sales", a: "20.9%", y: "20.4%" },
+    { k: "ar", n: "AR DOH (= AR / daily sales)", a: "43.4", y: "43.4" },
+    { k: "inv", n: "Inv DOH (= inventory / daily COGS)", a: "59.4", y: "59.4" },
+    { k: "ppe", n: "NFATO (= sales / net PP&E)", a: "12.5", y: "12.5" },
+    { k: "ap", n: "AP DOH (= AP / daily purchases)", a: "39.7", y: "10" },
+    { k: "acc", n: "Acc. exp. / Sales", a: "1.46%", y: "1.46%" }
+  ];
+  function ratiosPanel(hl) {
+    return '<aside class="panel sheet"><div class="panel-title">Projection assumptions<small>from the assignment</small></div>' +
+      '<div class="ex-scroll"><table class="assume"><thead><tr><th></th><th>1996</th></tr></thead><tbody>' +
+      RATIOS.map(function (a) { return '<tr class="' + (a.k && a.k === hl ? "hl" : "") + '"><td>' + a.n + "</td><td>" + a.y + "</td></tr>"; }).join("") +
+      "</tbody></table></div></aside>";
   }
 
   function assume3Panel(hl) {
