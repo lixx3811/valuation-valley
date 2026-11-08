@@ -561,21 +561,21 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
 
   // Level 2, step 5: one ratio pick per line of the 1996 pro forma
   var BUILD = [
-    { k: "cogs", ask: 'Which ratio gives <span class="item">1996 cost of goods sold</span>?', rate: 0.75, cards: [
+    { k: "cogs", order: [1, 0, 2], ask: 'Which ratio gives <span class="item">1996 cost of goods sold</span>?', rate: 0.75, cards: [
       { t: "75.0%", d: "CGS / Sales, 1996 assumption", ok: true,
         why: "The 1996 assumption. It already includes the 2% trade discounts from paying suppliers within 10 days." },
       { t: "75.6%", d: "CGS / Sales, 1993–95 average",
         why: "That is the historical average. The 1996 assumption already reflects the trade discounts, a structural change." },
       { t: "74.0%", d: "CGS / Sales, 1997 assumption",
         why: "74.0% applies from 1997 on. For 1996, use the 1996 assumption." } ] },
-    { k: "opex", ask: 'Which ratio gives <span class="item">1996 operating expenses</span>?', rate: 0.204, cards: [
+    { k: "opex", order: [2, 1, 0], ask: 'Which ratio gives <span class="item">1996 operating expenses</span>?', rate: 0.204, cards: [
       { t: "20.4%", d: "Op. exp. / Sales, 1996 assumption", ok: true,
         why: "The 1996 assumption from the assignment." },
       { t: "20.9%", d: "Op. exp. / Sales, 1993–95 average",
         why: "That is the historical average. Use the 1996 assumption from the assignment." },
       { t: "20.0%", d: "Op. exp. / Sales, 1997 assumption",
         why: "20.0% applies from 1997 on. For 1996, use the 1996 assumption." } ] },
-    { k: "tax", ask: 'Which tax rate goes on <span class="item">1996 EBIT</span>?', rate: 0.35, cards: [
+    { k: "tax", order: [1, 2, 0], ask: 'Which tax rate goes on <span class="item">1996 EBIT</span>?', rate: 0.35, cards: [
       { t: "35%", d: "The assignment’s tax rate", ok: true,
         why: "The assignment says to use 35% throughout and to ignore the tax schedule in note (c). Apply it to EBIT, not to income after interest." },
       { t: "20.5%", d: "1993–95 average rate",
@@ -690,7 +690,7 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
         { k: "out", n: "Leave out", d: "Financing, or below operating profit" },
         { k: "recompute", n: "Recompute", d: "Replace it with our own number" } ],
       why: WHY2,
-      draw: function () { var o = shuffle(["sales", "cogs", "opex", "ni"]); return shuffle(["int", o[0], o[1]]); },   // 8 Nov 2026: no tax line
+      draw: function () { return ["int"]; },   // 8 Nov 2026 (Xuelin, played together in class): interest expense only
       itemAsk: function (Ln) { return 'Turning 1995 into NOP: what do you do with <span class="item">' + esc(Ln.n) + "</span> ($" + fmt(Ln.v) + " thousand)?"; },
       itemSub: "It’s highlighted in the income statement.",
       finish: "Finish the Mill",
@@ -1177,12 +1177,12 @@ sup .slot { min-width: 32px; height: 28px; font-size: 15px; padding: 0 5px; vert
     if (!run || !run.answered) return;
     if (run.step === 4) {
       if (run.level === 1 && run.pass === "nonop") { run.pass = "debt"; resetStepState(); render(); window.scrollTo(0, 0); return; }
-      if (cfg().build && run.bi < cfg().build.length - 1) { run.bi += 1; run.order = shuffle([0, 1, 2]); resetStepState(); render(); window.scrollTo(0, 0); return; }
+      if (cfg().build && run.bi < cfg().build.length - 1) { run.bi += 1; run.order = cfg().build[run.bi].order || shuffle([0, 1, 2]); resetStepState(); render(); window.scrollTo(0, 0); return; }
       return win();
     }
     run.step += 1; resetStepState();
     if (cfg().cats && run.step >= 1 && run.step <= 3 && run.step > run.items.length) run.step = 4;   // fewer than 3 line questions
-    if (run.step === 4 && cfg().build) { run.bi = 0; run.order = shuffle([0, 1, 2]); }
+    if (run.step === 4 && cfg().build) { run.bi = 0; run.order = cfg().build[0].order || shuffle([0, 1, 2]); }
     if (cfg().quiz) run.order = shuffle([0, 1, 2]);
     if (cfg().match) { run.place = {}; run.selCard = null; run.locked = {}; run.typed = {}; run.cardOrder = shuffle(mStep().cards.map(function (c) { return c.id; })); }
     render(); window.scrollTo(0, 0);
